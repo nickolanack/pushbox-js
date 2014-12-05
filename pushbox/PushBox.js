@@ -1,5 +1,9 @@
 /**
- * Lightbox system that allows multiple nested lightboxes to be open.
+ * PushBox, is based on SqueezeBox, by Harald Kirschner <mail [at] digitarald.de> and Rouven Weßling <me [at] rouvenwessling.de>
+ * Pushbox is intended to provide a the same features of SqueezeBox, but with the ability to provide stackable PushBoxes, so that 
+ * opening a child pushbox from within some parent Pushbox, allows the child access to the entire size of the screen. PushBoxes 
+ * can initiated from a child window, and will be physically opened by the root window
+ * 
  *
  * @version		2.0
  *
@@ -7,7 +11,6 @@
  * @author		Harald Kirschner <mail [at] digitarald.de> SqueezeBox
  * @author		Rouven Weßling <me [at] rouvenwessling.de> SqueezeBox
  * @author		Nick Blackwell 	
- * @copyright	Author
  * 
  * There are multiple ways to open a window using PushBox, it is recomended to use PushBoxWindow (a global instance) 
  * to open windows in situations where some other caller might also open a window, or windows should stack. 
@@ -15,8 +18,8 @@
  * @example
  * 
  * 
- 	var element=(...) //some complex html element. a video?
-	PushBoxWindow.open(element, {handler:"append", size: {x:800, y:600}});
+ *	var element=(...) //some complex html element. a video?
+ *	PushBoxWindow.open(element, {handler:"append", size: {x:800, y:600}, push:true});
  * 
  */
 
