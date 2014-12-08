@@ -308,10 +308,9 @@ var PushBox = new Class({
 		var me=this;
 		if (!this.handlers[handler]) return false;
 		this.content.className = 'sbox-content-' + handler;
-		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, [(function(){
-				var c=me.handlers[handler].call(me, content);
-				return c;
-		})()]);
+		//updated delay arguments, to pass array as third argument, there seems to be an issue otherwise, even though the 
+		//documentation indicates a single item can be passed, _applyContent recieves null otherwise
+		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, [me.handlers[handler].call(me, content)]);
 		if (this.overlay.retrieve('opacity')) return this;
 		this.toggleOverlay(true);
 		this.fx.overlay.start(this.options.overlayOpacity);
