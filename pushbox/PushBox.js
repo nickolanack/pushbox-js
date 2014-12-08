@@ -295,8 +295,8 @@ var PushBox = new Class({
 	_trash: function() {
 		this.element = this.asset = null;
 		
-		this.window.distroy();
-		this.overlay.distroy();
+		this.window.destroy();
+		this.overlay.destroy();
 		
 		this.options = {};
 		this.removeEvents().setOptions(this.presets).callChain();
