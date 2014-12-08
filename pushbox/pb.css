@@ -21,3 +21,13 @@
 	height: 100%;
 }
 
+a.pb-btn-close {
+ background-image: url(ic_clear_black_18dp.png); 
+	width: 10px;
+	height: 10px;
+	display: inline-block;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background-position: center;
+}
