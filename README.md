@@ -3,7 +3,7 @@ pushbox-js
 
 Creates stackable html Push-box popovers can be used to display Iframes, images or generated html
 
-'''js
+```js
 $$('a')[0].addEvent('click',function(){
                                         pb=window.parent.PushBoxWindow.open(
                                                 form,
@@ -19,4 +19,4 @@ $$('a')[0].addEvent('click',function(){
                                                 pb=null;
                                         });
                                 });
-'''
+```
