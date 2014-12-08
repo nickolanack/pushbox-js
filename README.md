@@ -5,9 +5,9 @@ Creates stackable html Push-box popovers can be used to display Iframes, images 
 
 ```js
 pb=window.parent.PushBoxWindow.open(form,{
-handler:'append',
-push:true,
-size:{x: 600, y: 380}
+   handler:'append',
+   push:true,
+   size:{x: 600, y: 380}
 });
                           
 ```
