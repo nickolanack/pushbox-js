@@ -122,7 +122,7 @@ var PushBox = new Class({
 		}
 		this.content = new Element('div', {'class': 'pb-c'}).inject(this.win);
 		this.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', role: 'button'}).inject(this.win);
-		this.closeBtn.setProperty('aria-controls', 'pb-window');
+		this.closeBtn.setProperty('aria-controls', 'pb-w');
 		this.fx = {
 				overlay: new Fx.Tween(this.overlay, Object.append({
 					property: 'opacity',
@@ -294,7 +294,10 @@ var PushBox = new Class({
 
 	_trash: function() {
 		this.element = this.asset = null;
-		this.content.empty();
+		
+		this.window.distroy();
+		this.overlay.distroy();
+		
 		this.options = {};
 		this.removeEvents().setOptions(this.presets).callChain();
 	},
