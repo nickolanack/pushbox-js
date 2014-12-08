@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+
+.pbox-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: black;
+}
+
+.pbox-window {
+	position: absolute;
+	background-color: white;
+	border-radius: 3px;
+	box-shadow: 0 0 5px black;
+	transition: top 0.5s, left 0.5s;
+}
