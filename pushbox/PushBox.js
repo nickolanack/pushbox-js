@@ -305,10 +305,11 @@ var PushBox = new Class({
 	},
 
 	_setContent: function(handler, content) {
+		var me=this;
 		if (!this.handlers[handler]) return false;
 		this.content.className = 'sbox-content-' + handler;
 		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, (function(){
-				var c=this.handlers[handler].call(this, content);
+				var c=me.handlers[handler].call(me, content);
 				return c;
 		})());
 		if (this.overlay.retrieve('opacity')) return this;
@@ -318,6 +319,7 @@ var PushBox = new Class({
 	},
 
 	_applyContent: function(content, size) {
+	
 		if (!this.isOpen && !this.applyTimer) return;
 		this.applyTimer = clearTimeout(this.applyTimer);
 		this.hideContent();
