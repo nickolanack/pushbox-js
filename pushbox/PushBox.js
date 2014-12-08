@@ -92,13 +92,13 @@ var PushBox = new Class({
 
 	_build: function() {
 		this.overlay = new Element('div', {
-			'class': 'pbox-overlay',
+			'class': 'pb-o',
 			'aria-hidden': 'true',
 			styles: { zIndex: this.options.zIndex},
 			tabindex: -1
 		});
 		this.win = new Element('div', {
-			'class': 'pbox-window',
+			'class': 'pb-w',
 			role: 'dialog',
 			'aria-hidden': 'true',
 			styles: {zIndex: this.options.zIndex + 2}
@@ -111,18 +111,18 @@ var PushBox = new Class({
 					|| (Browser.ie && Browser.version >= 9)) {
 				this.win.addClass('shadow');
 			} else if (!Browser.ie6) {
-				var shadow = new Element('div', {'class': 'sbox-bg-wrap'}).inject(this.win);
+				var shadow = new Element('div', {'class': 'pb-bg-wrap'}).inject(this.win);
 				var relay = function(e) {
 					this.overlay.fireEvent('click', [e]);
 				}.bind(this);
 				['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].each(function(dir) {
-					new Element('div', {'class': 'sbox-bg sbox-bg-' + dir}).inject(shadow).addEvent('click', relay);
+					new Element('div', {'class': 'pb-bg pb-bg-' + dir}).inject(shadow).addEvent('click', relay);
 				});
 			}
 		}
-		this.content = new Element('div', {'class': 'pbox-content'}).inject(this.win);
-		this.closeBtn = new Element('a', {'class': 'pbox-btn-close', href: '#', role: 'button'}).inject(this.win);
-		this.closeBtn.setProperty('aria-controls', 'pbox-window');
+		this.content = new Element('div', {'class': 'pb-c'}).inject(this.win);
+		this.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', role: 'button'}).inject(this.win);
+		this.closeBtn.setProperty('aria-controls', 'pb-window');
 		this.fx = {
 				overlay: new Fx.Tween(this.overlay, Object.append({
 					property: 'opacity',
@@ -307,7 +307,7 @@ var PushBox = new Class({
 	_setContent: function(handler, content) {
 		var me=this;
 		if (!this.handlers[handler]) return false;
-		this.content.className = 'sbox-content-' + handler;
+		this.content.className = 'pb-c pb-c-' + handler;
 		//updated delay arguments, to pass array as third argument, there seems to be an issue otherwise, even though the 
 		//documentation indicates a single item can be passed, _applyContent recieves null otherwise
 		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, [me.handlers[handler].call(me, content)]);
@@ -502,7 +502,7 @@ var PushBox = new Class({
 
 	toggleLoading: function(state) {
 		this.isLoading = state;
-		this.win[(state) ? 'addClass' : 'removeClass']('sbox-loading');
+		this.win[(state) ? 'addClass' : 'removeClass']('pb-ld');
 		if (state) {
 			this.win.setProperty('aria-busy', state);
 			this.fireEvent('onLoading', [this.win]);
