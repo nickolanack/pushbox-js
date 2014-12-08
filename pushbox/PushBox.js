@@ -182,13 +182,13 @@ var PushBox = new Class({
 
 		this._assignOptions();
 
-		var handler = handler || this.options.handler;
+		var handler = this.options.handler;
 		if (handler)return this._setContent(handler, this.parsers[handler].call(this, (handler=='append'?subject:true)));
-		var ret = false;
+		
 		return this.parsers.some(function(parser, key) {
 			var content = parser.call(this);
 			if (content) {
-				ret = this._setContent(key, content);
+				this._setContent(key, content);
 				return true;
 			}
 			return false;
@@ -204,7 +204,6 @@ var PushBox = new Class({
 		this.win.addClass(this.options.classWindow);
 	},
 	getPushBoxFor:function(window){
-		var me=this;
 		var stack=window.parent.PushBox?window.parent.PushBox.PushBoxStack:PushBox.PushBoxStack;
 		//window.parent.console.debug(stack);
 		var found=false;
@@ -251,7 +250,6 @@ var PushBox = new Class({
 	 * @returns returns the pushbox that opened this pushbox. or false this is a root pushbox.
 	 */
 	getOpenerPushBox:function(){
-		var me=this;
 		return PushBox.GetPushBoxOpener(this);
 	},
 	/**
@@ -670,6 +668,9 @@ var PushBox = new Class({
 		image: function(url) {
 			
 			var size, tmp = new Image();
+			
+			//TODO: set default size.
+			
 			this.asset = null;
 			tmp.onload = tmp.onabort = tmp.onerror = (function() {
 				tmp.onload = tmp.onabort = tmp.onerror = null;
