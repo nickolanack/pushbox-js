@@ -281,10 +281,13 @@ var PushBox = new Class({
 		try{if (!this.isOpen || (stoppable && !Function.from(this.options.closable).call(this, e))) return this;}catch(e){
 			console.error(["PushBox Close Exception",e]);
 		}
-		this.fx.overlay.start(0).chain(this.toggleOverlay.bind(this));
-		this.win.setProperty('aria-hidden', 'true');
+		
 		this.fireEvent('onClose', [this.content]);
-		this._trash();
+		
+		this.fx.overlay.start(0).chain(this.toggleOverlay.bind(this)).chain(this._trash().bind(this));
+		this.win.setProperty('aria-hidden', 'true');
+		
+		
 		this.toggleListeners();
 		this.isOpen = false;
 		return this;
