@@ -9,14 +9,12 @@ In this example, two popovers are opened and stacked.
 ```js
 window.parent.PushBoxWindow.open(htmlFormEl,{
    handler:'append',
-   size:{x: 600, y: 380}
 });
 
 
 window.parent.PushBoxWindow.open(htmlAlertEl,{
    handler:'append',
    push:true,
-   size:{x: 600, y: 380}
 });
 
 ```
@@ -27,13 +25,49 @@ In this case the second pb will wipe the first (notice the absence of push:true 
 ```js
 window.parent.PushBoxWindow.open(htmlFormEl,{
    handler:'append',
-   size:{x: 600, y: 380}
 });
 
 
 window.parent.PushBoxWindow.open(htmlAlertEl,{
    handler:'append',
-   size:{x: 600, y: 380}
 });
 
 ```
+
+Open Iframes, x-domain considerations may be neccesary
+
+```js
+window.parent.PushBoxWindow.open('http//....',{
+   handler:'iframe',
+});
+```
+
+
+Images
+
+```js
+window.parent.PushBoxWindow.open('http://../image.png',{
+   handler:'image'
+});
+```
+
+Sizing
+
+```js
+window.parent.PushBoxWindow.open(htmlContentEl,{
+   handler:'append',
+   size:{x:100,y:100}
+});
+```
+
+Reusing inline html
+
+```js
+var p=el.parentNode;
+window.parent.PushBoxWindow.open(el,{
+   handler:'append',
+}).addEvent('onClose',function(){
+   p.appendChild(el);
+});
+```
+
