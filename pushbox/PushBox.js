@@ -284,7 +284,7 @@ var PushBox = new Class({
 		
 		this.fireEvent('onClose', [this.content]);
 		
-		this.fx.overlay.start(0).chain(this.toggleOverlay.bind(this)).chain(this._trash().bind(this));
+		this.fx.overlay.start(0).chain(this.toggleOverlay.bind(this)).chain(this._trash.bind(this));
 		this.win.setProperty('aria-hidden', 'true');
 		
 		
