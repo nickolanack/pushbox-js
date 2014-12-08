@@ -9,7 +9,6 @@ In this example, two popovers are opened and stacked.
 ```js
 window.parent.PushBoxWindow.open(htmlFormEl,{
    handler:'append',
-   push:true,
    size:{x: 600, y: 380}
 });
 
