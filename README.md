@@ -67,7 +67,7 @@ var p=el.parentNode;
 window.parent.PushBoxWindow.open(el,{
    handler:'append',
 }).addEvent('onClose',function(){
-   p.appendChild(el);
+   p.appendChild(el); //returns el to p. useful if pubox is triggered on some reocurring event
 });
 ```
 
