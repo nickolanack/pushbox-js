@@ -282,11 +282,12 @@ var PushBox = new Class({
 			console.error(["PushBox Close Exception",e]);
 		}
 		
-		this.fireEvent('onClose', [this.content]); 
+		this.fireEvent('onClose', [this.content]);
 		
-		this.fx.overlay.start(0).chain(this.toggleOverlay.bind(this)).chain(this._trash.bind(this));
+		this.fx.overlay.start(0).chain(this.toggleOverlay.bind(this)).chain();
 		this.win.setProperty('aria-hidden', 'true');
 		
+		this._trash();
 		
 		this.toggleListeners();
 		this.isOpen = false;
@@ -298,7 +299,8 @@ var PushBox = new Class({
 	_trash: function() {
 		this.element = this.asset = null;
 		
-		this.content.destroy();
+		this.win.destroy();
+		this.overlay.destroy();
 		
 		this.options = {};
 		this.removeEvents().setOptions(this.presets).callChain();
