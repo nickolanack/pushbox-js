@@ -144,8 +144,7 @@ var PushBox = new Class({
 					link: 'cancel'
 				}, this.options.contentFx)).set(0)
 		};
-		$$('body')[0].appendChild(this.overlay);
-		$$('body')[0].appendChild(this.win);
+		
 	},
 
 
@@ -158,6 +157,10 @@ var PushBox = new Class({
 			delete options.push;
 			return (new PushBox()).open(subject,options);
 		}
+		
+		$$('body')[0].appendChild(this.overlay);
+		$$('body')[0].appendChild(this.win);
+		
 		me.removeStyles();
 		if(PushBox.IndexOfPushBox(me)<0){
 			PushBox.AddToStack(me);
@@ -351,6 +354,7 @@ var PushBox = new Class({
 			this.resize(size, true);
 			this.isOpen = true;
 			this.win.setProperty('aria-hidden', 'false');
+			
 			this.fireEvent('onOpen', [this.content]);
 		} else {
 			this.resize(size);
@@ -520,6 +524,7 @@ var PushBox = new Class({
 		if (this.options.overlay) {
 			var full = this.doc.getSize().x;
 			this.overlay.set('aria-hidden', (state) ? 'false' : 'true');
+			
 			this.doc.body[(state) ? 'addClass' : 'removeClass']('body-overlayed');
 			if (state) {
 				this.scrollOffset = this.doc.getWindow().getSize().x - full;
