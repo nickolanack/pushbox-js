@@ -21,3 +21,20 @@ window.parent.PushBoxWindow.open(htmlAlertEl,{
 });
 
 ```
+
+
+In this case the second pb will wipe the first (notice the absence of push:true option)
+
+```js
+window.parent.PushBoxWindow.open(htmlFormEl,{
+   handler:'append',
+   size:{x: 600, y: 380}
+});
+
+
+window.parent.PushBoxWindow.open(htmlAlertEl,{
+   handler:'append',
+   size:{x: 600, y: 380}
+});
+
+```
