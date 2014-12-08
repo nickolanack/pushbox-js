@@ -307,7 +307,10 @@ var PushBox = new Class({
 	_setContent: function(handler, content) {
 		if (!this.handlers[handler]) return false;
 		this.content.className = 'sbox-content-' + handler;
-		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, this.handlers[handler].call(this, content));
+		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, (function(){
+				var c=this.handlers[handler].call(this, content);
+				return c;
+		})());
 		if (this.overlay.retrieve('opacity')) return this;
 		this.toggleOverlay(true);
 		this.fx.overlay.start(this.options.overlayOpacity);
