@@ -291,11 +291,11 @@ var PushBox = new Class({
 		this.fireEvent('onClose', [this.content]);
 		
 		this.fx.overlay.start(0).chain(function(){
-			me.toggleOverlay();
+			me._hideOverlay();
 			me._trash();
 		}); 
 		this.win.setProperty('aria-hidden', 'true');
-		this.toggleListeners();
+		this._removeListeners();
 		
 		
 		this.isOpen = false;
@@ -331,7 +331,7 @@ var PushBox = new Class({
 		//documentation indicates a single item can be passed, _applyContent recieves null otherwise
 		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, [me.handlers[handler].call(me, content)]);
 		if (this.overlay.retrieve('opacity')) return this;
-		this.toggleOverlay(true);
+		this._showOverlay();
 		this.fx.overlay.start(this.options.overlayOpacity);
 		return this.reposition();
 	},
@@ -359,7 +359,7 @@ var PushBox = new Class({
 		}
 		this.callChain();
 		if (!this.isOpen) {
-			this.toggleListeners(true);
+			this._addListeners(true);
 			this.resize(size, true);
 			this.isOpen = true;
 			this.win.setProperty('aria-hidden', 'false');
@@ -511,14 +511,23 @@ var PushBox = new Class({
 		return to;
 
 	},
-	
-	toggleListeners: function(state) {
-		var fn = (state) ? 'addEvent' : 'removeEvent';
-		this.closeBtn[fn]('click', this.bound.close);
-		this.overlay[fn]('click', this.bound.close);
-		this.doc[fn]('keydown', this.bound.key)[fn]('mousewheel', this.bound.scroll);
-		this.doc.getWindow()[fn]('resize', this.bound.window)[fn]('scroll', this.bound.window);
+		
+	_addListeners:function(){
+		var me=this;
+		me.closeBtn.addEvent('click', me.bound.close);
+		me.overlay.addEvent('click', me.bound.close);
+		me.doc.addEvent('keydown', me.bound.key).addEvent('mousewheel', me.bound.scroll);
+		me.doc.getWindow().addEvent('resize', me.bound.window).addEvent('scroll', me.bound.window);
 	},
+	
+	_removeListeners:function(){
+		var me=this;
+		me.closeBtn.removeEvent('click', me.bound.close);
+		me.overlay.removeEvent('click', me.bound.close);
+		me.doc.removeEvent('keydown', me.bound.key).removeEvent('mousewheel', me.bound.scroll);
+		me.doc.getWindow().removeEvent('resize', me.bound.window).removeEvent('scroll', me.bound.window);
+	},
+	
 
 	toggleLoading: function(state) {
 		this.isLoading = state;
@@ -529,17 +538,24 @@ var PushBox = new Class({
 		}
 	},
 
-	toggleOverlay: function(state) {
+	_hideOverlay:function(){
 		if (this.options.overlay) {
-			var full = this.doc.getSize().x;
-			this.overlay.set('aria-hidden', (state) ? 'false' : 'true');
 			
-			this.doc.body[(state) ? 'addClass' : 'removeClass']('body-overlayed');
-			if (state) {
-				this.scrollOffset = this.doc.getWindow().getSize().x - full;
-			} else {
-				this.doc.body.setStyle('margin-right', '');
-			}
+			this.overlay.set('aria-hidden', 'false');	
+			this.doc.body.removeClass('body-overlayed');	
+			this.doc.body.setStyle('margin-right', '');
+			
+		}
+	},
+	
+	_showOverlay:function(){
+		if (this.options.overlay) {
+			
+			var full = this.doc.getSize().x;
+			this.overlay.set('aria-hidden','true');		
+			this.doc.bodyaddClass('body-overlayed');
+			this.scrollOffset = this.doc.getWindow().getSize().x - full;
+			
 		}
 	},
 
