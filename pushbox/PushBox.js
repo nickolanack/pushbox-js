@@ -5,21 +5,20 @@
  * can initiated from a child window, and will be physically opened by the root window
  * 
  *
- * @version		2.0
+ * @version		2.1
  *
- * @license		MIT-style license
+ * @license		MIT
+ * 
+ * @author		Nick Blackwell nickblackwell82@gmail.com
+ * 
  * @author		Harald Kirschner <mail [at] digitarald.de> SqueezeBox
  * @author		Rouven Weßling <me [at] rouvenwessling.de> SqueezeBox
- * @author		Nick Blackwell 	
+ *
  * 
  * There are multiple ways to open a window using PushBox, it is recomended to use PushBoxWindow (a global instance) 
  * to open windows in situations where some other caller might also open a window, or windows should stack. 
  * 
- * @example
- * 
- * 
- *	var element=(...) //some complex html element. a video?
- *	PushBoxWindow.open(element, {handler:"append", size: {x:800, y:600}, push:true});
+ * @example see example usage at https://github.com/nickolanack/pushbox-js
  * 
  */
 
