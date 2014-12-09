@@ -341,14 +341,14 @@ var PushBox = new Class({
 	},
 
 	_applyContent: function(content, size) {
-	
+		var me=this;
 		if (!this.isOpen && !this.applyTimer) return;
 		this.applyTimer = clearTimeout(this.applyTimer);
 		this.hideContent();
 		if (!content) {
-			this.toggleLoading(true);
+			me._startLoading();
 		} else {
-			if (this.isLoading) this.toggleLoading(false);
+			if (this.isLoading) me._stopLoading();
 			this.fireEvent('onUpdate', [this.content], 20);
 		}
 		if (content) {
@@ -537,13 +537,23 @@ var PushBox = new Class({
 	},
 	
 
-	toggleLoading: function(state) {
-		this.isLoading = state;
-		this.win[(state) ? 'addClass' : 'removeClass']('pb-ld');
-		if (state) {
-			this.win.setProperty('aria-busy', state);
-			this.fireEvent('onLoading', [this.win]);
-		}
+	//called when content begins loading and fires onLoading event (called in _applyContent)
+	_startLoading:function(){
+		var me=this;
+		me.isLoading=true;
+		me.win.addClass('pb-ld');
+		me.win.setProperty('aria-busy', true);
+		me.fireEvent('onLoading', [me.win]);
+	},
+	
+	
+	//called after content is available and fires onLoaded event (called in _applyContent)
+	_stopLoading:function(){
+		var me=this;
+		me.isLoading=false;
+		me.win.removeClass('pb-ld');
+		me.win.setProperty('aria-busy', false);
+		me.fireEvent('onLoaded', [me.win]);
 	},
 
 	_hideOverlay:function(){
