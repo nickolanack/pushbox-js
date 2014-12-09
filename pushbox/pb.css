@@ -1,6 +1,7 @@
 @CHARSET "UTF-8";
 
-.pb-o{
+.pb-o {
+	
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -8,8 +9,10 @@
 }
 
 .pb-w {
+	
 	position: absolute;
 	transition: top 0.5s, left 0.5s;
+	
 }
 
 .pb-c {
@@ -25,6 +28,7 @@
 }
 
 a.pb-btn-close {
+	
  	background-image: url(ic_clear_black_18dp.png); 
 	width: 12px;
 	height: 12px;
