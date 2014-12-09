@@ -289,7 +289,7 @@ var PushBox = new Class({
 		}
 		
 		this.fireEvent('onClose', [this.content]);
-		
+		this.fx.content.start(0);
 		this.fx.overlay.start(0).chain(function(){
 			me._hideOverlay();
 			me._trash();
