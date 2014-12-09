@@ -121,7 +121,7 @@ var PushBox = new Class({
 			}
 		}
 		me.content = new Element('div', {'class': 'pb-c'}).inject(me.win);
-		if(me.options.closeable){
+		if(me.options.closable){
 			me.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', role: 'button'}).inject(me.win);
 			me.closeBtn.setProperty('aria-controls', 'pb-w');
 		}
@@ -518,7 +518,7 @@ var PushBox = new Class({
 		
 	_addListeners:function(){
 		var me=this;
-		if(me.options.closeable){
+		if(me.options.closable){
 			me.closeBtn.addEvent('click', me.bound.close);
 			me.overlay.addEvent('click', me.bound.close);
 		}
@@ -528,7 +528,7 @@ var PushBox = new Class({
 	
 	_removeListeners:function(){
 		var me=this;
-		if(me.options.closeable){
+		if(me.options.closable){
 			me.closeBtn.removeEvent('click', me.bound.close);
 			me.overlay.removeEvent('click', me.bound.close);
 		}
@@ -581,7 +581,7 @@ var PushBox = new Class({
 		var me=this;
 		switch (e.key) {
 		case 'esc': 
-			if(me.options.closeable){
+			if(me.options.closable){
 				this.close(e);
 			}
 			break;
