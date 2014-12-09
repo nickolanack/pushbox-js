@@ -90,61 +90,62 @@ var PushBox = new Class({
 	},
 
 	_build: function() {
-		this.overlay = new Element('div', {
+		var me=this;
+		me.overlay = new Element('div', {
 			'class': 'pb-o',
 			'aria-hidden': 'true',
 			styles: { zIndex: this.options.zIndex},
 			tabindex: -1
 		});
-		this.win = new Element('div', {
+		me.win = new Element('div', {
 			'class': 'pb-w',
 			role: 'dialog',
 			'aria-hidden': 'true',
-			styles: {zIndex: this.options.zIndex + 2}
+			styles: {zIndex: me.options.zIndex + 2}
 		});
-		if (this.options.shadow) {
+		if (me.options.shadow) {
 			if (Browser.chrome
 					|| (Browser.safari && Browser.version >= 3)
 					|| (Browser.opera && Browser.version >= 10.5)
 					|| (Browser.firefox && Browser.version >= 3.5)
 					|| (Browser.ie && Browser.version >= 9)) {
-				this.win.addClass('shadow');
+				me.win.addClass('shadow');
 			} else if (!Browser.ie6) {
-				var shadow = new Element('div', {'class': 'pb-bg-wrap'}).inject(this.win);
+				var shadow = new Element('div', {'class': 'pb-bg-wrap'}).inject(me.win);
 				var relay = function(e) {
-					this.overlay.fireEvent('click', [e]);
+					me.overlay.fireEvent('click', [e]);
 				}.bind(this);
 				['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].each(function(dir) {
 					new Element('div', {'class': 'pb-bg pb-bg-' + dir}).inject(shadow).addEvent('click', relay);
 				});
 			}
 		}
-		this.content = new Element('div', {'class': 'pb-c'}).inject(this.win);
+		me.content = new Element('div', {'class': 'pb-c'}).inject(me.win);
 		if(me.options.closeable){
-			this.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', role: 'button'}).inject(this.win);
-			this.closeBtn.setProperty('aria-controls', 'pb-w');
+			me.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', role: 'button'}).inject(me.win);
+			me.closeBtn.setProperty('aria-controls', 'pb-w');
 		}
 		
-		this.fx = {
-				overlay: new Fx.Tween(this.overlay, Object.append({
+		me.fx = {
+				overlay: new Fx.Tween(me.overlay, Object.append({
 					property: 'opacity',
 					onStart: Events.prototype.clearChain,
 					duration: 250,
 					link: 'cancel'
-				}, this.options.overlayFx)).set(0),
-				win: new Fx.Morph(this.win, Object.append({
+				}, me.options.overlayFx)).set(0),
+				win: new Fx.Morph(me.win, Object.append({
 					onStart: Events.prototype.clearChain,
 					unit: 'px',
 					duration: 750,
 					transition: Fx.Transitions.Quint.easeOut,
 					link: 'cancel',
 					unit: 'px'
-				}, this.options.resizeFx)),
-				content: new Fx.Tween(this.content, Object.append({
+				}, me.options.resizeFx)),
+				content: new Fx.Tween(me.content, Object.append({
 					property: 'opacity',
 					duration: 250,
 					link: 'cancel'
-				}, this.options.contentFx)).set(0)
+				}, me.options.contentFx)).set(0)
 		};
 		
 	},
