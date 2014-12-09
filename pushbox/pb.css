@@ -41,3 +41,7 @@ a.pb-btn-close {
 	background-color: white;
 	
 }
+
+body.body-overlayed{
+	overflow: hidden;
+}

@@ -284,7 +284,8 @@ var PushBox = new Class({
 
 		var stoppable = (typeOf(e) == 'event');
 		if (stoppable) e.stop();
-		try{if (!this.isOpen || (stoppable && !Function.from(this.options.closable).call(this, e))) return this;}catch(e){
+		try{
+			if (!this.isOpen || (stoppable && !Function.from(this.options.closable).call(this, e))) return this;}catch(e){
 			console.error(["PushBox Close Exception",e]);
 		}
 		
@@ -297,10 +298,8 @@ var PushBox = new Class({
 		this.win.setProperty('aria-hidden', 'true');
 		this._removeListeners();
 		
-		
 		this.isOpen = false;
 		return this;
-		
 
 	},
 
@@ -746,6 +745,9 @@ var PushBox = new Class({
 				}
 			}).bind(this);
 			tmp.src = url;
+			//it is posible that the image loads imediately. 
+			//in this case, this.asset will be set. otherwise return null
+			//and let the onload method call _applyContent itself, (which is what this returns into)
 			if (tmp && tmp.onload && tmp.complete) tmp.onload();
 			return (this.asset) ? [this.asset, size] : null;
 		},
