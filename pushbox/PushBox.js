@@ -120,8 +120,11 @@ var PushBox = new Class({
 			}
 		}
 		this.content = new Element('div', {'class': 'pb-c'}).inject(this.win);
-		this.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', role: 'button'}).inject(this.win);
-		this.closeBtn.setProperty('aria-controls', 'pb-w');
+		if(me.options.closeable){
+			this.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', role: 'button'}).inject(this.win);
+			this.closeBtn.setProperty('aria-controls', 'pb-w');
+		}
+		
 		this.fx = {
 				overlay: new Fx.Tween(this.overlay, Object.append({
 					property: 'opacity',
@@ -514,16 +517,20 @@ var PushBox = new Class({
 		
 	_addListeners:function(){
 		var me=this;
-		me.closeBtn.addEvent('click', me.bound.close);
-		me.overlay.addEvent('click', me.bound.close);
+		if(me.options.closeable){
+			me.closeBtn.addEvent('click', me.bound.close);
+			me.overlay.addEvent('click', me.bound.close);
+		}
 		me.doc.addEvent('keydown', me.bound.key).addEvent('mousewheel', me.bound.scroll);
 		me.doc.getWindow().addEvent('resize', me.bound.window).addEvent('scroll', me.bound.window);
 	},
 	
 	_removeListeners:function(){
 		var me=this;
-		me.closeBtn.removeEvent('click', me.bound.close);
-		me.overlay.removeEvent('click', me.bound.close);
+		if(me.options.closeable){
+			me.closeBtn.removeEvent('click', me.bound.close);
+			me.overlay.removeEvent('click', me.bound.close);
+		}
 		me.doc.removeEvent('keydown', me.bound.key).removeEvent('mousewheel', me.bound.scroll);
 		me.doc.getWindow().removeEvent('resize', me.bound.window).removeEvent('scroll', me.bound.window);
 	},
@@ -570,8 +577,13 @@ var PushBox = new Class({
 	},
 
 	onKey: function(e) {
+		var me=this;
 		switch (e.key) {
-		case 'esc': this.close(e);
+		case 'esc': 
+			if(me.options.closeable){
+				this.close(e);
+			}
+			break;
 		case 'up': case 'down': return false;
 		}
 	},
