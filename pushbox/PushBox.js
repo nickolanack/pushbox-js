@@ -302,6 +302,7 @@ var PushBox = new Class({
 	_trash: function() {
 		this.element = this.asset = null;
 		
+		this.win.empty();
 		this.win.destroy();
 		this.overlay.destroy();
 		
