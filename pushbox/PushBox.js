@@ -377,7 +377,7 @@ var PushBox = new Class({
 			return; 
 		}
 		
-		me.win.addClass('images');
+		me.win.addClass('imgs');
 		
 		
 		
@@ -386,7 +386,7 @@ var PushBox = new Class({
 		var hasNext=true;
 		var hasPrevious=true;
 		var i=-1;
-		var imageThumbsContainer=new Element('div',{'class':'thumbnails'});
+		var imageThumbsContainer=new Element('div',{'class':'thmbs'});
 		
 		Array.each(me.options.images, function(img, index){
 			var imgStr;
@@ -429,7 +429,7 @@ var PushBox = new Class({
 			
 			var prv=(images.length+i-1)%images.length;
 			
-			var prevContainer=new Element('div',{'class':'previous_image'});
+			var prevContainer=new Element('div',{'class':'pr_img'});
 			var prev=new Element('a',{href:'#'});
 			
 			prevContainer.appendChild(prev);
@@ -440,7 +440,7 @@ var PushBox = new Class({
 		if(hasNext){
 			
 			var nxt=(i+1)%images.length;
-			var nextContainer=new Element('div',{'class':'next_image'});
+			var nextContainer=new Element('div',{'class':'n_img'});
 			var next=new Element('a',{href:'#'});
 			nextContainer.appendChild(next);
 			me.win.appendChild(nextContainer);
