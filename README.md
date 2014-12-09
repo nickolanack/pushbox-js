@@ -5,6 +5,8 @@ Creates stackable html Push-box popovers can be used to display Iframes, images 
 
 ```js
 PushBoxWindow.open(item [, options]); //generally the item is an element or string url
+parent.window.PushBoxWindow //this is the prefered way to open iframes and for iframes to open nested pushboxes
+
 ```
 
 In this example, two popovers are opened and stacked. 
