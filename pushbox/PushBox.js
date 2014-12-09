@@ -309,6 +309,9 @@ var PushBox = new Class({
 		this.win.destroy();
 		this.overlay.destroy();
 		
+		this.win=null;
+		this.overlay=null;
+		
 		this.options = {};
 		this.removeEvents().setOptions(this.presets).callChain();
 	},
