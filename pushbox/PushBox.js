@@ -158,6 +158,10 @@ var PushBox = new Class({
 			return (new PushBox()).open(subject,options);
 		}
 		
+		if(!(this.overlay&&this.win)){
+			this._build();
+		}
+		
 		$$('body')[0].appendChild(this.overlay);
 		$$('body')[0].appendChild(this.win);
 		
