@@ -553,7 +553,7 @@ var PushBox = new Class({
 			
 			var full = this.doc.getSize().x;
 			this.overlay.set('aria-hidden','true');		
-			this.doc.bodyaddClass('body-overlayed');
+			this.doc.body.addClass('body-overlayed');
 			this.scrollOffset = this.doc.getWindow().getSize().x - full;
 			
 		}
