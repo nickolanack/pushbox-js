@@ -1,5 +1,6 @@
 pushbox-js
 ==========
+Requires Mootools:
 
 Creates stackable html Push-box popovers can be used to display Iframes, images or generated html
 
