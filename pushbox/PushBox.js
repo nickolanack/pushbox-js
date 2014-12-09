@@ -329,7 +329,8 @@ var PushBox = new Class({
 		this.content.className = 'pb-c pb-c-' + handler;
 		//updated delay arguments, to pass array as third argument, there seems to be an issue otherwise, even though the 
 		//documentation indicates a single item can be passed, _applyContent recieves null otherwise
-		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, [me.handlers[handler].call(me, content)]);
+		
+		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, me.handlers[handler].call(me, content));
 		if (this.overlay.retrieve('opacity')) return this;
 		this._showOverlay();
 		this.fx.overlay.start(this.options.overlayOpacity);
@@ -750,12 +751,12 @@ var PushBox = new Class({
 		},
 
 		clone: function(el) {
-			if (el) return el.clone();
+			if (el) return [el.clone()];
 			return this._onError();
 		},
 
 		adopt: function(el) {
-			if (el) return el;
+			if (el) return [el];
 			return this._onError();
 		},
 
@@ -790,17 +791,17 @@ var PushBox = new Class({
 				this.asset.setStyle('display', 'none').inject(this.content);
 				return false;
 			}
-			return this.asset;
+			return [this.asset];
 		},
 
 		string: function(str) {
-			return str;
+			return [str];
 		},
 		url:function(url){
 			return this.handlers.ajax.bind(this)(url);
 		},
 		append:function(el){
-			return el;
+			return [el];
 		}
 	}
 
