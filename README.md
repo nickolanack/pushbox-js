@@ -12,12 +12,12 @@ parent.window.PushBoxWindow //this is the prefered way to open iframes and for i
 In this example, two popovers are opened and stacked. 
 
 ```js
-window.parent.PushBoxWindow.open(htmlFormEl,{
+PushBoxWindow.open(htmlFormEl,{
    handler:'append',
 });
 
 
-window.parent.PushBoxWindow.open(htmlAlertEl,{
+PushBoxWindow.open(htmlAlertEl,{
    handler:'append',
    push:true,
 });
@@ -28,18 +28,20 @@ window.parent.PushBoxWindow.open(htmlAlertEl,{
 In this case the second pb will wipe the first (notice the absence of push:true option)
 
 ```js
-window.parent.PushBoxWindow.open(htmlFormEl,{
+PushBoxWindow.open(htmlFormEl,{
    handler:'append',
 });
 
 
-window.parent.PushBoxWindow.open(htmlAlertEl,{
+PushBoxWindow.open(htmlAlertEl,{
    handler:'append',
 });
 
 ```
 
-Open Iframes, x-domain considerations may be neccesary
+Open Iframes, x-domain considerations may be neccesary. using window.parent has the advantage that nested iframes
+can open pushboxes and they are not bounded by the size of thier own pushbox window the advantage is that 
+complex window states and flows can be created with simple iframes
 
 ```js
 window.parent.PushBoxWindow.open('http//....',{
@@ -51,7 +53,7 @@ window.parent.PushBoxWindow.open('http//....',{
 Images
 
 ```js
-window.parent.PushBoxWindow.open('http://../image.png',{
+PushBoxWindow.open('http://../image.png',{
    handler:'image'
 });
 ```
