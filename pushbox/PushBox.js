@@ -150,9 +150,6 @@ var PushBox = new Class({
 		
 	},
 
-
-
-
 	open: function(subject, options) {
 		//this.initialize();
 		var me=this;
@@ -213,6 +210,7 @@ var PushBox = new Class({
 		this.overlay.addClass(this.options.classOverlay);
 		this.win.addClass(this.options.classWindow);
 	},
+	
 	getPushBoxFor:function(window){
 		var stack=window.parent.PushBox?window.parent.PushBox.PushBoxStack:PushBox.PushBoxStack;
 		//window.parent.console.debug(stack);
@@ -225,6 +223,7 @@ var PushBox = new Class({
 		return found;
 
 	},
+	
 	getPushBoxAbove:function(window){
 		var me=this;
 		var stack=me.getPushBoxesAbove(window);
@@ -236,6 +235,7 @@ var PushBox = new Class({
 		var me=this;
 		return PushBox.GetPushBoxesAbove(me);
 	},
+	
 	/**
 	 * closes the top most p-boxes above the current window. 
 	 * assuming that the root document contains a Pushbox stack. Openers, should (if possible),
