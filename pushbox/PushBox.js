@@ -158,6 +158,10 @@ var PushBox = new Class({
 			return (new PushBox()).open(subject,options);
 		}
 		
+		
+		
+		if (this.element != null) this._trash();
+		
 		if(!(this.overlay&&this.win)){
 			this._build();
 		}
@@ -176,7 +180,7 @@ var PushBox = new Class({
 
 		}
 
-		if (this.element != null) this._trash();
+		
 		this.element = document.id(subject) || false;
 
 		this.setOptions(Object.append(this.presets, options || {}));
