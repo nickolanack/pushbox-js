@@ -84,9 +84,6 @@ var PushBox = new Class({
 		};
 		me.isOpen = me.isLoading = false;
 
-
-		
-
 	},
 
 	_build: function() {
@@ -161,7 +158,7 @@ var PushBox = new Class({
 		
 		
 		if (this.element != null) this._trash();
-		
+	
 		if(!(this.overlay&&this.win)){
 			this._build();
 		}
@@ -304,7 +301,7 @@ var PushBox = new Class({
 			me._trash();
 		}); 
 		this.win.setProperty('aria-hidden', 'true');
-		this._removeListeners();
+		
 		
 		this.isOpen = false;
 		return this;
@@ -312,6 +309,8 @@ var PushBox = new Class({
 	},
 
 	_trash: function() {
+		this._removeInteractionListeners();
+		
 		this.element = this.asset = null;
 		
 		this.win.empty();
@@ -322,6 +321,8 @@ var PushBox = new Class({
 		this.overlay=null;
 		
 		this.options = {};
+		
+		//all events are removed. so listeners can effectively only listen once.
 		this.removeEvents().setOptions(this.presets).callChain();
 	},
 
@@ -366,8 +367,13 @@ var PushBox = new Class({
 			}
 		}
 		this.callChain();
+		
+		if(!me._hasListeners){
+			this._addInteractionListeners();
+		}
+		
 		if (!this.isOpen) {
-			this._addListeners(true);
+			
 			this.resize(size, true);
 			this.isOpen = true;
 			this.win.setProperty('aria-hidden', 'false');
@@ -520,17 +526,19 @@ var PushBox = new Class({
 
 	},
 		
-	_addListeners:function(){
+	_addInteractionListeners:function(){
 		var me=this;
+		(me._hasListeners===true)throw 'Should not add pushbox focus listeners before removing existing';
 		if(me.options.closable){
 			me.closeBtn.addEvent('click', me.bound.close);
 			me.overlay.addEvent('click', me.bound.close);
 		}
 		me.doc.addEvent('keydown', me.bound.key).addEvent('mousewheel', me.bound.scroll);
 		me.doc.getWindow().addEvent('resize', me.bound.window).addEvent('scroll', me.bound.window);
+		me._hasListeners=true;
 	},
 	
-	_removeListeners:function(){
+	_removeInteractionListeners:function(){
 		var me=this;
 		if(me.options.closable){
 			me.closeBtn.removeEvent('click', me.bound.close);
@@ -538,6 +546,7 @@ var PushBox = new Class({
 		}
 		me.doc.removeEvent('keydown', me.bound.key).removeEvent('mousewheel', me.bound.scroll);
 		me.doc.getWindow().removeEvent('resize', me.bound.window).removeEvent('scroll', me.bound.window);
+		me._hasListeners=false;
 	},
 	
 
@@ -620,6 +629,13 @@ var PushBox = new Class({
 		var to=[{left:me.win.getPosition().x+20},{left:me.win.getPosition().x-20},{left:me.win.getPosition().x}];
 		shake.start(to[0]).chain(function(){shake.start(to[1]);}).chain(function(){shake.start(to[0]);}).chain(function(){shake.start(to[1]);}).chain(function(){shake.start(to[2]);});
 		
+	},
+	
+	pulse:function(){
+		var me=this;
+		me.content.addClass('pulse'); setTimeout(function(){
+			me.content.removeClass('pulse');
+		},120);
 	},
 	
 	addStyle:function(style){
