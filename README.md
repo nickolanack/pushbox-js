@@ -2,13 +2,37 @@ pushbox-js
 ==========
 Requires Mootools:
 
-PushBoxes, are stackable html popovers that can be used to display html content, including iframes, images, and dom elements.
+PushBoxes, are stackable html popovers (lightboxes, modal popovers) that can be used to display html content, including
+iframes, images, and dom elements. PushBoxes when open, display a shadow overlay accros the entire window, and have a content
+overlay or window to display the new content. Generally, the content includes a close button and the entire shadow (background)
+when clicked also triggers a close event although that is configurable.
 
-One of the issues with opening iframed content within a web page application is that generally there is little or no communication between the parent and child windows, obviously they will not share js and css libraries, and the child window
-is constrained within the width and height provided by the parent. This makes it difficult to create larger web applications
-in a modular fashion, (iframed sections) while appearing to have seamless integration between windows.
+Displaying content in this way itself is not the most difficult thing to do. However, what is much more difficult and
+what this library is trying to provide, is a tool that allows popovers to be nested.  Complex should be 
+converted to a linear stack of open overlays, and each overlay should recieve the full size of the browser window. 
 
-'PushBox' is intended to provide a solution to displaying content in the form of overlays with posible nested child overlays (ie: an open child overlay can open another pushboxed iframe or dom overlay), such that any child overlays have access to the entire screen, and that iframes appear to be part of the same root window application. 
+
+
+An example use case: I have a web application that opens various PushBoxes to display user interactive forms, menus, or content including videos. I want to display a video within a PushBox and also have an edit button that instead of taking the user to a edit form, simply opens the form overtop of the application in another PushBox. The problems are:
+   
+   The video was displayed within an iframe, and opening a PushBox within the iframe normally prevents the inner PushBox
+   from accessing the entire size, unless the parent iframe was the entire size, but it is not.
+   
+   The form must be smaller than the parent iframe or the entire PushBox becomes scrollable
+   
+   The shadow area does not cover the video PushBoxes own shadow area so that when it is configured to close on shadow click
+   both pushboxes close sometimes (unless i click the shadow inside the iframe). 
+   
+   It becomes visually obvious that there is a boundary because of the iframe. I can see it cutting off the inner shadow.
+
+
+In my own use of PushBox I generally keep nesting/stacking very shallow, occasionally 2 or 3 overlays can be stacked, and 
+even then I always keep all the overlays as simple as possible, overlays don't need any navigation menues, except to drill 
+down to more specific content becuase navigating back, is done by closing the top PushBox, and maybe a core navigation menu 
+is at the bottom so that i can pop down to that if i need to. So in this way, the complexity of PushBoxes is eleviated by the
+simpicity of design that it allows. 
+
+
 
 PushBoxes can handle non-iframed content, like images and dom elements, however these items automatically recieve the 
 size of the parent window since they truely are within the parent, and (more importantly) if they (behaving as a sub application), open a child overlay then these too, also recieve the entire size becuase their parent had the entire screen. This, howerver, is not the case with iframed content since opening an overlay inside an iframe assumes that the iframe is the entire window, and clicking outside the parent iframe would not be recognised by the inner overlay and would probably trigger
