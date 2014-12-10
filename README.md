@@ -2,6 +2,8 @@ pushbox-js
 ==========
 Requires Mootools:
 
+PushBoxes, are stackable html popovers that can be used to display html content, including iframes, images, and dom elements.
+
 One of the issues with opening iframed content within a web page application is that generally there is little or no communication between the parent and child windows, obviously they will not share js and css libraries, and the child window
 is constrained within the width and height provided by the parent. This makes it difficult to create larger web applications
 in a modular fashion, (iframed sections) while appearing to have seamless integration between windows.
@@ -19,7 +21,6 @@ as long as they are not also displaying iframes. By following this pattern, all 
 
 
 
-PushBoxes, are stackable html popovers that can be used to display html content, including iframes, images, and dom elements.
 
 PushBoxWindow, a global instance, is created and should be used to handle all content presentation, using PushBoxWindow.open, 
 iframes can be opened using parent.window.PushBoxWindow if the root window includes PushBox.js. 
