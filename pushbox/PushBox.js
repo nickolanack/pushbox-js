@@ -528,7 +528,9 @@ var PushBox = new Class({
 		
 	_addInteractionListeners:function(){
 		var me=this;
-		(me._hasListeners===true)throw new Error('Should not add pushbox focus listeners before removing existing');
+		if(me._hasListeners===true){
+			throw 'Should not add pushbox focus listeners before removing existing';
+		}
 		if(me.options.closable){
 			me.closeBtn.addEvent('click', me.bound.close);
 			me.overlay.addEvent('click', me.bound.close);
