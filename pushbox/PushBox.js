@@ -43,6 +43,7 @@ var PushBox = new Class({
 		target: null,
 		closable: true,
 		closeBtn: true,
+		iframePreload:true,
 		zIndex: 65558,
 		overlayOpacity: 0.7,
 		classWindow: '',
