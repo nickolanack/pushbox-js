@@ -129,7 +129,8 @@ var PushBox = new Class({
 					property: 'opacity',
 					onStart: Events.prototype.clearChain,
 					duration: 250,
-					link: 'cancel'
+					link: 'cancel',
+					onComplete:me._onOverlay.bind(me)
 				}, me.options.overlayFx)).set(0),
 				win: new Fx.Morph(me.win, Object.append({
 					onStart: Events.prototype.clearChain,
@@ -137,17 +138,40 @@ var PushBox = new Class({
 					duration: 750,
 					transition: Fx.Transitions.Quint.easeOut,
 					link: 'cancel',
-					unit: 'px'
+					unit: 'px',
+					onComplete:me._onWindow.bind(me)
 				}, me.options.resizeFx)),
 				content: new Fx.Tween(me.content, Object.append({
 					property: 'opacity',
 					duration: 250,
-					link: 'cancel'
+					link: 'cancel',
+					onComplete:me._onContent.bind(me)
 				}, me.options.contentFx)).set(0)
 		};
 		
 	},
 
+	_onOverlay:function(){
+		
+		console.log('overlay');
+	},
+	_onWindow:function(){
+		
+		console.log('window');
+	},
+	_onContent:function(){
+		var me=this;
+		if (me.content.getStyle('opacity')){
+			me.fireEvent('onShow', [me.win]);
+			
+			if(me.options.closable){
+				me.win.appendChild(me.closeBtn);
+			}
+		
+		}
+		console.log('content');
+	},
+	
 	open: function(subject, options) {
 		//this.initialize();
 		var me=this;
@@ -296,7 +320,9 @@ var PushBox = new Class({
 		}
 		
 		this.fireEvent('onClose', [this.content]);
+		this._content_state='closing';
 		this.fx.content.start(0);
+		this._overlay_state='closing';
 		this.fx.overlay.start(0).chain(function(){
 			me._hideOverlay();
 			me._trash();
@@ -334,7 +360,10 @@ var PushBox = new Class({
 
 	_setContent: function(handler, content) {
 		var me=this;
-		if (!this.handlers[handler]) return false;
+		if (!this.handlers[handler]) {
+			//throw 'invalid handler: '+handler;
+			return false;
+		}
 		this.content.className = 'pb-c pb-c-' + handler;
 		//updated delay arguments, to pass array as third argument, there seems to be an issue otherwise, even though the 
 		//documentation indicates a single item can be passed, _applyContent recieves null otherwise
@@ -342,20 +371,21 @@ var PushBox = new Class({
 		
 		this.applyTimer = (function(){
 			me._applyContent.apply(me, c);
-			if(me.options.closable){
-				me.win.appendChild(me.closeBtn);
-			}
+			
 			
 		}).delay(this.fx.overlay.options.duration);
 		if (this.overlay.retrieve('opacity')) return this;
 		this._showOverlay();
+		this._overlay_state='opening';
 		this.fx.overlay.start(this.options.overlayOpacity);
 		return this.reposition();
 	},
 
 	_applyContent: function(content, size) {
 		var me=this;
-		if (!this.isOpen && !this.applyTimer) return;
+		if (!this.isOpen && !this.applyTimer){
+			return;
+		}
 		this.applyTimer = clearTimeout(this.applyTimer);
 		this.hideContent();
 		if (!content) {
@@ -514,10 +544,15 @@ var PushBox = new Class({
 
 		to=me.checkAnchor(to);
 		this.hideContent();
+		this._window_state='opening';
 		if (!instantly) {
+
 			this.fx.win.start(to).chain(this.showContent.bind(this));
+			
 		} else {
+
 			this.win.setStyles(to);
+			
 			this.showTimer = this.showContent.delay(50, this);
 		}
 		setTimeout(this.reposition.bind(this),0);
@@ -607,12 +642,15 @@ var PushBox = new Class({
 	},
 
 	showContent: function() {
-		if (this.content.get('opacity')) this.fireEvent('onShow', [this.win]);
+		var me=this;
+		this._content_state='opening';
 		this.fx.content.start(1);
+
 	},
 
 	hideContent: function() {
-		if (!this.content.get('opacity')) this.fireEvent('onHide', [this.win]);
+		if (!this.content.getStyle('opacity')) this.fireEvent('onHide', [this.win]);
+		this._content_state='closing';
 		this.fx.content.cancel().set(0);
 	},
 
@@ -850,7 +888,7 @@ var PushBox = new Class({
 					this._applyContent(this.asset.setStyle('display', ''));
 				}.bind(this));
 				this.asset.setStyle('display', 'none').inject(this.content);
-				return false;
+				return null;
 			}
 			return [this.asset];
 		},
