@@ -560,8 +560,9 @@ var PushBox = new Class({
 		me.win.addClass('pb-ld');
 		me.win.setProperty('aria-busy', true);
 		me.fireEvent('onLoading', [me.win]);
+		me._addLoadingStyle();
 	},
-	
+	_addLoadingStyle:function(){}, //method stub
 	
 	//called after content is available and fires onLoaded event (called in _applyContent)
 	_stopLoading:function(){
@@ -570,7 +571,10 @@ var PushBox = new Class({
 		me.win.removeClass('pb-ld');
 		me.win.setProperty('aria-busy', false);
 		me.fireEvent('onLoaded', [me.win]);
+		me._removeLoadingStyle();
 	},
+	
+	_removeLoadingStyle:function(){},// method stub
 
 	_hideOverlay:function(){
 		if (this.options.overlay) {
@@ -581,6 +585,8 @@ var PushBox = new Class({
 			
 		}
 	},
+	
+	
 	
 	_showOverlay:function(){
 		if (this.options.overlay) {
@@ -754,9 +760,9 @@ var PushBox = new Class({
 
 		image: function(url) {
 			
-			var size, tmp = new Image();
+			var size=null, tmp = new Image();
 			
-			//TODO: set default size.
+			// should size be set to some default here?
 			
 			this.asset = null;
 			tmp.onload = tmp.onabort = tmp.onerror = (function() {
