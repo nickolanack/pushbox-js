@@ -341,7 +341,7 @@ var PushBox = new Class({
 		var c=me.handlers[handler].call(me, content);
 		
 		this.applyTimer = (function(){
-			this._applyContent.apply(me, c);
+			me._applyContent.apply(me, c);
 			if(me.options.closable){
 				me.win.appendChild(me.closeBtn);
 			}
