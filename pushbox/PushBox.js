@@ -829,10 +829,7 @@ var PushBox = new Class({
 				src: url,
 				frameBorder: 0,
 				width: this.options.size.x,
-				height: this.options.size.y,
-				onload:function(){
-					console.log('load iframe');
-				}
+				height: this.options.size.y
 			}, this.options.iframeOptions));
 			if (this.options.iframePreload) {
 				this.asset.addEvent('load', function() {
