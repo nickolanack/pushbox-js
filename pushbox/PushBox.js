@@ -215,13 +215,13 @@ var PushBox = new Class({
 	
 	getPushBoxFor:function(window){
 		var stack=window.parent.PushBox?window.parent.PushBox.PushBoxStack:PushBox.PushBoxStack;
-		//window.parent.console.debug(stack);
+		// window.parent.console.debug(stack);
 		var found=false;
 		Object.each(stack,function(pb){
 			if(!found&&pb.asset&&pb.asset.contentWindow==window)found=pb;
 
 		});
-		//window.parent.console.debug(found); 
+		// window.parent.console.debug(found); 
 		return found;
 
 	},
@@ -339,7 +339,7 @@ var PushBox = new Class({
 		//updated delay arguments, to pass array as third argument, there seems to be an issue otherwise, even though the 
 		//documentation indicates a single item can be passed, _applyContent recieves null otherwise
 		
-		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, me.handlers[handler].call(me, content));
+		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, function(){me.handlers[handler].call(me, content);});
 		if (this.overlay.retrieve('opacity')) return this;
 		this._showOverlay();
 		this.fx.overlay.start(this.options.overlayOpacity);
