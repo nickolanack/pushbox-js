@@ -120,7 +120,7 @@ var PushBox = new Class({
 		}
 		me.content = new Element('div', {'class': 'pb-c'}).inject(me.win);
 		if(me.options.closable){
-			me.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', role: 'button'}).inject(me.win);
+			me.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', role: 'button'});
 			me.closeBtn.setProperty('aria-controls', 'pb-w');
 		}
 		
@@ -338,8 +338,15 @@ var PushBox = new Class({
 		this.content.className = 'pb-c pb-c-' + handler;
 		//updated delay arguments, to pass array as third argument, there seems to be an issue otherwise, even though the 
 		//documentation indicates a single item can be passed, _applyContent recieves null otherwise
+		var c=me.handlers[handler].call(me, content);
 		
-		this.applyTimer = this._applyContent.delay(this.fx.overlay.options.duration, this, function(){me.handlers[handler].call(me, content);});
+		this.applyTimer = (function(){
+			this._applyContent.apply(me, c);
+			if(me.options.closable){
+				me.win.appendChild(me.closeBtn);
+			}
+			
+		}).delay(this.fx.overlay.options.duration);
 		if (this.overlay.retrieve('opacity')) return this;
 		this._showOverlay();
 		this.fx.overlay.start(this.options.overlayOpacity);
