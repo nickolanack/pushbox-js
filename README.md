@@ -8,9 +8,9 @@ content overlay or window to display the new content. Generally, the content inc
 (background) when clicked also triggers a close event although that is configurable.
 
 Displaying content in this way itself is not the most difficult thing to do. However, what is much more difficult and
-what this library is trying to provide, is a tool that allows popovers to be nested.  Complex should be 
-converted to a linear stack of open overlays, and each overlay should recieve the full size of the browser window. 
-
+what this library is trying to provide, is a tool that allows popovers to be nested.  Complex tree like nestings rarely 
+occur, but should be posible and appear as a linear stack of open overlays, each recieving the full size of the browser window. 
+This is difficult to do, when views are created as a series of iframes becuase iframe overlays generally cannot create new child overlays outside of thier own bounding box.
 
 
 Example Use Case: I'm developing a web application that opens various PushBoxes to display user interactive forms, menus, or content including videos. I want to display a video within a PushBox and also have an edit button that instead of taking the user to a edit form, simply opens the form above the rest of the application in another PushBox. The problems are:
