@@ -2,7 +2,7 @@ pushbox-js
 ==========
 Requires Mootools:
 
-![alt text](https://github.com/nickolanack/pushbox-js/logo.png "Logo Title Text 1")
+![alt text](https://github.com/nickolanack/pushbox-js/master/logo.png "Logo Title Text 1")
 
 
 
