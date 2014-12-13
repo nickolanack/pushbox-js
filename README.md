@@ -3,7 +3,7 @@ pushbox-js
 Requires Mootools:
 
 <div style="float: left" >
-   <imgsrc="https://github.com/nickolanack/pushbox-js/raw/master/logo.png" />
+   <img src="https://github.com/nickolanack/pushbox-js/raw/master/logo.png" />
 </div>
 
 
