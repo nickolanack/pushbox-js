@@ -2,7 +2,7 @@ pushbox-js
 ==========
 Requires Mootools:
 
-PushBoxes, are stackable html popovers (lightboxes, modal popovers) that can be used to display html content, including
+PushBoxes, are stackable html popovers (aka: lightbox or modal popover/window) that can be used to display html content, including
 iframes, images, and dom elements. PushBoxes when open, display a shadow overlay accros the entire window, and have a central
 content overlay or window to display the new content. Generally, the content includes a close button and the entire shadow
 (background) when clicked also triggers a close event although that is configurable.
