@@ -2,9 +2,9 @@ pushbox-js
 ==========
 Requires Mootools:
 
-
-   <img style="float: left" src="https://github.com/nickolanack/pushbox-js/raw/master/logo.png" />
-
+<div style="float: left" >
+   <imgsrc="https://github.com/nickolanack/pushbox-js/raw/master/logo.png" />
+</div>
 
 
 PushBoxes, are stackable html popovers (aka: lightbox or modal popover/window) that can be used to display html content, including
