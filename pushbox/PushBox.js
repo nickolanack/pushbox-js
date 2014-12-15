@@ -365,14 +365,12 @@ var PushBox = new Class({
 			return false;
 		}
 		this.content.className = 'pb-c pb-c-' + handler;
-		//updated delay arguments, to pass array as third argument, there seems to be an issue otherwise, even though the 
+		//updated delay arguments, to pass array as second argument, there seems to be an issue (with some versions of mootools) otherwise, even though the 
 		//documentation indicates a single item can be passed, _applyContent recieves null otherwise
 		var c=me.handlers[handler].call(me, content);
 		
 		this.applyTimer = (function(){
 			me._applyContent.apply(me, c);
-			
-			
 		}).delay(this.fx.overlay.options.duration);
 		if (this.overlay.retrieve('opacity')) return this;
 		this._showOverlay();
