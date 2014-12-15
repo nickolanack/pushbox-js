@@ -187,14 +187,7 @@ var PushBox = new Class({
 	},
 	_onContent:function(){
 		var me=this;
-		if (me.content.getStyle('opacity')){
-			me.fireEvent('onShow', [me.win]);
-			
-			if(me.options.closable){
-				me.win.appendChild(me.closeBtn);
-			}
-		
-		}
+
 		console.log('content');
 	},
 	
@@ -438,13 +431,21 @@ var PushBox = new Class({
 		
 		if (!this.isOpen) {
 			
-			this.resize(size, true);
+			this.fit(size);
 			this.isOpen = true;
 			this.win.setProperty('aria-hidden', 'false');
-			
 			this.fireEvent('onOpen', [this.content]);
+			
 		} else {
-			this.resize(size);
+			this.resize(size, function(){
+				//on show?
+				console.log('resized');
+				
+				me.fireEvent('onShow', [me.win]);
+				if(me.options.closable){
+					me.win.appendChild(me.closeBtn);
+				}
+			});
 		}
 	},
 
@@ -532,8 +533,15 @@ var PushBox = new Class({
 		me.win.appendChild(imageThumbsContainer);
 		
 	},
-	
-	resize: function(size, instantly) {
+	fit:function(size){
+		var me=this;
+		me._resize(size,true);
+	},
+	resize:function(size, callback){
+		var me=this;
+		me._resize(size,true, callback);
+	},
+	_resize: function(size, instantly, callback) {
 		var me=this;
 		this.showTimer = clearTimeout(this.showTimer || null);
 		var box = this.doc.getSize(), scroll = this.doc.getScroll();
@@ -573,13 +581,21 @@ var PushBox = new Class({
 		this._window_state='opening';
 		if (!instantly) {
 
-			this.fx.win.start(to).chain(this.showContent.bind(this));
+			this.fx.win.start(to).chain(function(){
+				me.showContent();
+				if((typeof callback)=='function')callback();
+			});
 			
 		} else {
 
 			this.win.setStyles(to);
 			
-			this.showTimer = this.showContent.delay(50, this);
+			this.showTimer =(function(){
+				
+				me.showContent();
+				if((typeof callback)=='function')callback();
+				
+			}).delay(50);
 		}
 		setTimeout(this.reposition.bind(this),0);
 		return this;
@@ -610,6 +626,7 @@ var PushBox = new Class({
 	},
 	
 	_removeInteractionListeners:function(){
+		
 		var me=this;
 		if(me.options.closable){
 			me.closeBtn.removeEvent('click', me.bound.close);
@@ -618,28 +635,35 @@ var PushBox = new Class({
 		me.doc.removeEvent('keydown', me.bound.key).removeEvent('mousewheel', me.bound.scroll);
 		me.doc.getWindow().removeEvent('resize', me.bound.window).removeEvent('scroll', me.bound.window);
 		me._hasListeners=false;
+		
 	},
 	
 
 	//called when content begins loading and fires onLoading event (called in _applyContent)
 	_startLoading:function(){
+		
 		var me=this;
+		if(me.isLoading)return;
 		me.isLoading=true;
 		me.win.addClass('pb-ld');
 		me.win.setProperty('aria-busy', true);
 		me.fireEvent('onLoading', [me.win]);
 		me._addLoadingStyle();
+		
 	},
 	_addLoadingStyle:function(){}, //method stub
 	
 	//called after content is available and fires onLoaded event (called in _applyContent)
 	_stopLoading:function(){
+		
 		var me=this;
+		if(!me.isLoading)return;
 		me.isLoading=false;
 		me.win.removeClass('pb-ld');
 		me.win.setProperty('aria-busy', false);
 		me.fireEvent('onLoaded', [me.win]);
 		me._removeLoadingStyle();
+		
 	},
 	
 	_removeLoadingStyle:function(){},// method stub
@@ -649,7 +673,6 @@ var PushBox = new Class({
 			this.overlay.set('aria-hidden', 'false');	
 			this.doc.body.removeClass('body-overlayed');	
 			this.doc.body.setStyle('margin-right', '');
-
 	},
 	
 	
