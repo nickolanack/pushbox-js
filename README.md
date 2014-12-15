@@ -6,7 +6,7 @@ Requires Mootools:
    <img src="https://github.com/nickolanack/pushbox-js/raw/master/logo.png" />
 </div>
 
-##Introduction
+###Introduction
 PushBoxes, are stackable html popovers (aka: lightbox or modal popover/window) that can be used to display html content, including
 iframes, images, and dom elements. PushBoxes when open, display a shadow overlay accros the entire window, and have a central
 content overlay or window to display the new content. Generally, the content includes a close button and the entire shadow
@@ -17,7 +17,7 @@ what this library is trying to provide, is a tool that allows popovers to be nes
 occur, but should be posible and appear as a linear stack of open overlays, each recieving the full size of the browser window. 
 This is difficult to do, when views are created as a series of iframes becuase iframe overlays generally cannot create new child overlays outside of thier own bounding box.
 
-##Use Case
+###Use Case
 I'm developing a web application that opens various PushBoxes to display user interactive forms, menus, or content including videos. I want to display a video within a PushBox and also have an edit button that instead of taking the user to a edit form, simply opens the form above the rest of the application in another PushBox. The problems are:
    
    The video was displayed within an iframe, and opening a PushBox within the iframe normally prevents the inner PushBox
@@ -30,12 +30,12 @@ I'm developing a web application that opens various PushBoxes to display user in
    
    It becomes visualy obvious that there is a boundary because of the iframe. I can see it cutting off the inner shadow.
 
-
+###Practices
 In my own use of PushBox I generally keep nesting/stacking very shallow, occasionally 2 or 3 overlays can be stacked, and 
 even then I always keep all the overlays as simple as possible. Thats ok, overlays don't need any navigation menues, except to drill down to more specific content becuase navigating back can done by closing the top PushBox, and maybe a core navigation menu is at the bottom so that i can pop down to that if i need to. In this way, the complexity of PushBoxes is eleviated by the
 simpicity of design that it allows. 
 
-
+###Objectives
 The General Goals of PushBox:
 
 PushBoxes should able to open from the root window, as well as from inside any iframed content and that should not affect the
@@ -52,7 +52,7 @@ PushBoxes can open iframes, images, dom content, etc.
 
 
 
-
+##Usage
 
 ```js
 PushBoxWindow.open(item [, options]); //generally the item is an element or string url
