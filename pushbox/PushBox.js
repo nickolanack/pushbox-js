@@ -155,8 +155,7 @@ var PushBox = new Class({
 					property: 'opacity',
 					onStart: Events.prototype.clearChain,
 					duration: 250,
-					link: 'cancel',
-					onComplete:me._onOverlay.bind(me)
+					link: 'cancel'
 				}, me.options.overlayFx)).set(0),
 				win: new Fx.Morph(me.win, Object.append({
 					onStart: Events.prototype.clearChain,
@@ -164,33 +163,17 @@ var PushBox = new Class({
 					duration: 750,
 					transition: Fx.Transitions.Quint.easeOut,
 					link: 'cancel',
-					unit: 'px',
-					onComplete:me._onWindow.bind(me)
+					unit: 'px'
 				}, me.options.resizeFx)),
 				content: new Fx.Tween(me.content, Object.append({
 					property: 'opacity',
 					duration: 250,
-					link: 'cancel',
-					onComplete:me._onContent.bind(me)
+					link: 'cancel'
 				}, me.options.contentFx)).set(0)
 		};
 		
 	},
 
-	_onOverlay:function(){
-		
-		console.log('overlay');
-	},
-	_onWindow:function(){
-		
-		console.log('window');
-	},
-	_onContent:function(){
-		var me=this;
-
-		console.log('content');
-	},
-	
 	open: function(subject, options) {
 		//this.initialize();
 		var me=this;
@@ -407,10 +390,16 @@ var PushBox = new Class({
 		}
 		this.applyTimer = clearTimeout(this.applyTimer);
 		this.hideContent();
+		
+		var stopsLoading=false;
+		
 		if (!content) {
 			me._startLoading();
 		} else {
-			if (this.isLoading) me._stopLoading();
+			
+			if (this.isLoading){
+				stopsLoading=true;
+			}
 			this.fireEvent('onUpdate', [this.content], 20);
 		}
 		if (content) {
@@ -436,12 +425,33 @@ var PushBox = new Class({
 			this.win.setProperty('aria-hidden', 'false');
 			this.fireEvent('onOpen', [this.content]);
 			
+			if(content){
+				
+				if(stopsLoading){
+					me._stopLoading();
+				}
+				
+				me.fireEvent('onShow', [me.win]);
+				
+				if(me.options.closable){
+					me.win.appendChild(me.closeBtn);
+				}
+				
+			}
+			
+			
 		} else {
 			this.resize(size, function(){
 				//on show?
-				console.log('resized');
+				//console.log('resized');
+				
+				
+				if(stopsLoading){
+					me._stopLoading();
+				}
 				
 				me.fireEvent('onShow', [me.win]);
+				
 				if(me.options.closable){
 					me.win.appendChild(me.closeBtn);
 				}
@@ -931,7 +941,7 @@ var PushBox = new Class({
 			}, this.options.iframeOptions));
 			if (this.options.iframePreload) {
 				this.asset.addEvent('load', function() {
-					this._applyContent(this.asset.setStyle('display', ''));
+					this._applyContent(this.asset.setStyle('display', ''), this.options.size);
 				}.bind(this));
 				this.asset.setStyle('display', 'none').inject(this.content);
 				return null;
