@@ -381,9 +381,11 @@ var PushBox = new Class({
 		return this.reposition();
 	},
 
+	
 	_applyContent: function(content, size) {
 		var me=this;
-		if (!this.isOpen && !this.applyTimer){
+		if (!(this.isOpen || this.applyTimer)){
+			//already open, or about to open
 			return;
 		}
 		this.applyTimer = clearTimeout(this.applyTimer);
