@@ -6,7 +6,7 @@ Requires Mootools:
    <img src="https://github.com/nickolanack/pushbox-js/raw/master/logo.png" />
 </div>
 
-#Description
+##Introduction
 PushBoxes, are stackable html popovers (aka: lightbox or modal popover/window) that can be used to display html content, including
 iframes, images, and dom elements. PushBoxes when open, display a shadow overlay accros the entire window, and have a central
 content overlay or window to display the new content. Generally, the content includes a close button and the entire shadow
@@ -17,8 +17,8 @@ what this library is trying to provide, is a tool that allows popovers to be nes
 occur, but should be posible and appear as a linear stack of open overlays, each recieving the full size of the browser window. 
 This is difficult to do, when views are created as a series of iframes becuase iframe overlays generally cannot create new child overlays outside of thier own bounding box.
 
-
-Example Use Case: I'm developing a web application that opens various PushBoxes to display user interactive forms, menus, or content including videos. I want to display a video within a PushBox and also have an edit button that instead of taking the user to a edit form, simply opens the form above the rest of the application in another PushBox. The problems are:
+##Use Case
+I'm developing a web application that opens various PushBoxes to display user interactive forms, menus, or content including videos. I want to display a video within a PushBox and also have an edit button that instead of taking the user to a edit form, simply opens the form above the rest of the application in another PushBox. The problems are:
    
    The video was displayed within an iframe, and opening a PushBox within the iframe normally prevents the inner PushBox
    from accessing the entire size, unless the parent iframe was the entire size, but it is not.
