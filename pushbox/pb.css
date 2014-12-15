@@ -16,16 +16,23 @@
 	
 }
 
+.pb-w.shadow {
+	box-shadow: 0 0 5px black;
+}
+
 .pb-c {
 	
 	background-color: white;
 	border-radius: 3px;
-	box-shadow: 0 0 5px black;
 	width:100%;
 	height: 100%;
 	display: inline-block;
-	overflow-y: auto;
 
+}
+
+.pb-c>* {
+height: 100%;
+overflow-y: auto;
 }
 
 a.pb-btn-close {

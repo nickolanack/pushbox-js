@@ -26,6 +26,7 @@ var PushBox = new Class({
 	Implements:[Events, Options, Chain],
 
 	presets: {
+		
 		onOpen: function(){},
 		onClose: function(){},
 		onUpdate: function(){},
@@ -34,28 +35,51 @@ var PushBox = new Class({
 		onShow: function(){},
 		onHide: function(){},
 		size: {x: 600, y: 450},
+		
+		
+		// if set to an object, with min max, then the content will stay within these bounds (and update on screen resize)
 		elasticX:false, //or {min:200,max:1000},
 		elasticY:false, //or {min:200,max:1000}
+		
+		// when loading, the overlay is the following size
 		sizeLoading: {x: 200, y: 150},
+		
+		
+		// ensures that the overlay leaves the following margins (clickable shadow) around content
 		marginInner: {x: 20, y: 20},
-		marginImage: {x: 50, y: 75},
-		handler: false,
+		marginImage: {x: 50, y: 75}, //a bit larger to leave room for controls
+		
+		// generally passed as an option to open(), otherwise element is 'parsed' to decide handler
+		handler: false, 
 		target: null,
+		
+		// if false, closeBtn is assumed false, and shadow is unclickable, overlay can be closed using .close() method.
 		closable: true,
-		closeBtn: true,
+		closeBtn: true, //whether or not to show the close button (ignored when closable is false)
+		
+		// when true iframes are displayed after thier onload event, causes the loading overlay to display much longer
 		iframePreload:true,
+		
+		
 		zIndex: 65558,
 		overlayOpacity: 0.7,
+		
+		// additional optional class names to add to root elements
 		classWindow: '',
 		classOverlay: '',
+		
+		// options to apply to each overlay fx object. effects are used for both show and hide events
 		overlayFx: {},
 		resizeFx: {},
 		contentFx: {},
+		
+		// if set to a string, then it is assumed that the element has the named attribute and contains json encoded options
 		parse: false, // 'rel'
-		parseSecure: false,
-		shadow: true,
-		overlay: true,
-		document: null,
+		parseSecure: true, //if true, ensures that json encoded string is parsed safely. returning null if any dangerous syntax
+		
+		shadow: true, //for newer browsers this simply adds a shadow class to the root overlay
+		
+		document: null, //used for initialization, for setting document events
 		ajaxOptions: {}
 	},
 
@@ -76,12 +100,14 @@ var PushBox = new Class({
 		me.doc = me.presets.document || document;
 		me.options = {};
 		me.setOptions(this.presets);
-		me._build();
+		//me._build(); //builds on open 
 		me.bound = {
+				
 				window: me.reposition.bind(me, [null]),
 				scroll: me.checkTarget.bind(me),
 				close: me.close.bind(me),
 				key: me.onKey.bind(this)
+				
 		};
 		me.isOpen = me.isLoading = false;
 
@@ -619,39 +645,36 @@ var PushBox = new Class({
 	_removeLoadingStyle:function(){},// method stub
 
 	_hideOverlay:function(){
-		if (this.options.overlay) {
-			
+
 			this.overlay.set('aria-hidden', 'false');	
 			this.doc.body.removeClass('body-overlayed');	
 			this.doc.body.setStyle('margin-right', '');
-			
-		}
+
 	},
 	
 	
 	
 	_showOverlay:function(){
-		if (this.options.overlay) {
-			
+	
 			var full = this.doc.getSize().x;
 			this.overlay.set('aria-hidden','true');		
 			this.doc.body.addClass('body-overlayed');
 			this.scrollOffset = this.doc.getWindow().getSize().x - full;
-			
-		}
+
 	},
 
 	showContent: function() {
 		var me=this;
-		this._content_state='opening';
-		this.fx.content.start(1);
+		me._content_state='opening';
+		me.fx.content.start(1);
 
 	},
 
 	hideContent: function() {
-		if (!this.content.getStyle('opacity')) this.fireEvent('onHide', [this.win]);
-		this._content_state='closing';
-		this.fx.content.cancel().set(0);
+		var me=this;
+		if (!me.content.getStyle('opacity')) me.fireEvent('onHide', [me.win]);
+		me._content_state='closing';
+		me.fx.content.cancel().set(0);
 	},
 
 	onKey: function(e) {
