@@ -367,7 +367,7 @@ var PushBox = new Class({
 			return false;
 		}
 		this.content.className = 'pb-c pb-c-' + handler;
-		//updated delay arguments, to pass array as second argument, there seems to be an issue (with some versions of mootools) otherwise, even though the 
+		//updated delay arguments, to pass array as second argument, there seems to be an issue (with some mootools) otherwise, even though the 
 		//documentation indicates a single item can be passed, _applyContent recieves null otherwise
 		var c=me.handlers[handler].call(me, content);
 		
