@@ -52,6 +52,9 @@ a.pb-btn-close {
 	background-color: white;
 	
 }
+.scrolls>a.pb-btn-close {
+	right: 20px;
+}
 
 body.body-overlayed{
 	overflow: hidden;

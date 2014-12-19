@@ -407,6 +407,11 @@ var PushBox = new Class({
 				me.win.appendChild(me.closeBtn);
 			}
 			
+			var y=me.content.getScrollSize().y-me.win.getSize().y;
+			if(y>0){
+				me.win.addClass('scrolls');
+			}
+			
 		};
 		
 		if (!content) {
