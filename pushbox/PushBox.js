@@ -393,6 +393,21 @@ var PushBox = new Class({
 		
 		var stopsLoading=false;
 		
+		//called once content is visible.
+		var _applyNext=function(){
+			
+			if(stopsLoading){
+				me._stopLoading();
+			}
+			
+			me.fireEvent('onShow', [me.win]);
+			
+			if(me.options.closable){
+				me.win.appendChild(me.closeBtn);
+			}
+			
+		};
+		
 		if (!content) {
 			me._startLoading();
 		} else {
@@ -427,15 +442,8 @@ var PushBox = new Class({
 			
 			if(content){
 				
-				if(stopsLoading){
-					me._stopLoading();
-				}
 				
-				me.fireEvent('onShow', [me.win]);
-				
-				if(me.options.closable){
-					me.win.appendChild(me.closeBtn);
-				}
+				_applyNext();
 				
 			}
 			
@@ -444,21 +452,14 @@ var PushBox = new Class({
 			this.resize(size, function(){
 				//on show?
 				//console.log('resized');
-				
-				
-				if(stopsLoading){
-					me._stopLoading();
-				}
-				
-				me.fireEvent('onShow', [me.win]);
-				
-				if(me.options.closable){
-					me.win.appendChild(me.closeBtn);
-				}
+	
+				_applyNext();
 			});
 		}
 	},
 
+
+	
 	_addImageControls:function(){
 		var me=this;
 		var images=me.options.images;

@@ -30,6 +30,9 @@
 	overflow-y: auto;
 
 }
+.pb-c-iframe {
+	overflow: hidden;
+}
 
 .pb-c>* {
 height: 100%;
