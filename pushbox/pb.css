@@ -32,11 +32,11 @@
 }
 .pb-c-iframe {
 	overflow: hidden;
+	height: 100%;
 }
 
 .pb-c>* {
-height: 100%;
-
+	
 }
 
 a.pb-btn-close {

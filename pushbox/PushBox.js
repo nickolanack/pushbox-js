@@ -1094,8 +1094,10 @@ PushBox.GetPushBoxesAbove=function(windowOrPbox){
 
 window.addEvent("domready",function(){
 	if(!window.PushBoxWindow){
+		
 		window.PushBoxWindow=new PushBox();
 		PushBox.RemoveFromStack(window.PushBoxWindow);
 		PushBox.PushBoxStack=[];
+		
 	}
 });
