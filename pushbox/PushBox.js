@@ -401,6 +401,7 @@ var PushBox = new Class({
 			}
 			
 			me.fireEvent('onShow', [me.win]);
+			me.win.addClass('open');
 			
 			if(me.options.closable){
 				me.win.appendChild(me.closeBtn);
