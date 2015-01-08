@@ -221,16 +221,36 @@ var PushBox = new Class({
 		var handler = this.options.handler;
 		if (handler)return this._setContent(handler, this.parsers[handler].call(this, (handler=='append'?subject:true)));
 		
-		return this.parsers.some(function(parser, key) {
-			var content = parser.call(this);
-			if (content) {
-				this._setContent(key, content);
-				return true;
-			}
-			return false;
-		}, this);
+		
+		return this._pickParser(function(key, content){
+			this._setContent(key, content);
+		});
+		
 	},
 
+	//checks each parser function, and runs the callback the name and content of the first parser 
+	//that does not return false (assuming that the content is the return value of the parser function);
+	//the callback is expected to call _setContent(parser, content) parser is the name of the parser or handler.
+	_pickParser:function(callback){
+		
+		var me=this;
+		var parsers=Object.keys(me.parsers);
+		for(var i=0;i<parsers.length;i++){
+			(function(key){
+				
+				var content = me.parsers[key].call(me);
+				if (content) {
+					callback(key,content);
+					return true;
+				};
+				
+			})(parsers[i]);
+			
+		}
+		return false;
+		
+	},
+	
 	fromElement: function(from, options) {
 		return this.open(from, options);
 	},
