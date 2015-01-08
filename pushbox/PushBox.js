@@ -234,7 +234,7 @@ var PushBox = new Class({
 	_pickParser:function(callback){
 		
 		var me=this;
-		var parsers=Object.keys(me.parsers);
+		var parsers=Object.keys(Object.append({},me.parsers));
 		for(var i=0;i<parsers.length;i++){
 			(function(key){
 				
