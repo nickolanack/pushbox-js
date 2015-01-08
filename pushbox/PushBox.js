@@ -177,6 +177,7 @@ var PushBox = new Class({
 	open: function(subject, options) {
 		//this.initialize();
 		var me=this;
+		options=Object.append({},options);
 		if(options.push){
 			delete options.push;
 			return (new PushBox()).open(subject,options);
