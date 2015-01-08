@@ -223,7 +223,7 @@ var PushBox = new Class({
 		
 		
 		return this._pickParser(function(key, content){
-			this._setContent(key, content);
+			me._setContent(key, content);
 		});
 		
 	},
@@ -234,7 +234,7 @@ var PushBox = new Class({
 	_pickParser:function(callback){
 		
 		var me=this;
-		var parsers=Object.keys(Object.append({},me.parsers));
+		var parsers['image', 'iframe', 'append'];
 		for(var i=0;i<parsers.length;i++){
 			(function(key){
 				
