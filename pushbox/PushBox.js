@@ -1080,20 +1080,35 @@ PushBox.GetCurrentPushBox=function(theWindow){
 	return null;
 };
 
+
+
+
 PushBox.AddToStack=function(pushBox){
 	PushBox.GetPushBoxStack().push(pushBox);
 };
 PushBox.RemoveFromStack=function(pushBox){
-	(window.parent.PushBox&&window.parent.PushBox!=PushBox)?window.parent.PushBox.RemoveFromStack(pushBox):PushBox.PushBoxStack.splice(PushBox.IndexOfPushBox(pushBox),1);
+	(PushBox.Parent())?PushBox.Parent().RemoveFromStack(pushBox):PushBox.PushBoxStack.splice(PushBox.IndexOfPushBox(pushBox),1);
 };
 PushBox.PushBoxAtIndex=function(index){
-	return (window.parent.PushBox&&window.parent.PushBox!=PushBox)?window.parent.PushBox.PushBoxAtIndex(index):PushBox.PushBoxStack[index];
+	return (PushBox.Parent())?PushBox.Parent().PushBoxAtIndex(index):PushBox.PushBoxStack[index];
 };
 PushBox.IndexOfPushBox=function(pushBox){
-	return (window.parent.PushBox&&window.parent.PushBox!=PushBox)?window.parent.PushBox.IndexOfPushBox(pushBox):PushBox.PushBoxStack.indexOf(pushBox);
+	return (PushBox.Parent())?PushBox.Parent().IndexOfPushBox(pushBox):PushBox.PushBoxStack.indexOf(pushBox);
 };
 PushBox.GetPushBoxStack=function(){	
-	return (window.parent.PushBox&&window.parent.PushBox!=PushBox)?window.parent.PushBox.GetPushBoxStack():PushBox.PushBoxStack;
+	return (PushBox.Parent())?PushBox.Parent().GetPushBoxStack():PushBox.PushBoxStack;
+};
+
+PushBox.Parent=function(){
+	try{
+		if(window.parent.PushBox&&window.parent.PushBox!=PushBox){
+			return window.parent.PushBox;
+		}
+	}catch(e){
+		JSConsoleError(e);
+	}
+	
+	return false;
 };
 
 PushBox.GetPushBoxesAbove=function(windowOrPbox){
