@@ -146,7 +146,7 @@ var PushBox = new Class({
 		}
 		me.content = new Element('div', {'class': 'pb-c'}).inject(me.win);
 		if(me.options.closable){
-			me.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', role: 'button'});
+			me.closeBtn = new Element('a', {'class': 'pb-btn-close', href: '#', onclick:'return false', role: 'button'});
 			me.closeBtn.setProperty('aria-controls', 'pb-w');
 		}
 		
