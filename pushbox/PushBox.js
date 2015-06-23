@@ -222,9 +222,10 @@ var PushBox = new Class({
 		if (handler)return this._setContent(handler, this.parsers[handler].call(this, (handler=='append'?subject:true)));
 		
 		
-		return this._pickParser(function(key, content){
+		this._pickParser(function(key, content){
 			me._setContent(key, content);
 		});
+		return this;
 		
 	},
 
