@@ -191,8 +191,11 @@ var PushBox = new Class({
 			this._build();
 		}
 		
-		$$('body')[0].appendChild(this.overlay);
-		$$('body')[0].appendChild(this.win);
+
+
+		var container=me._insertElement();
+		container.appendChild(this.overlay);
+		container.appendChild(this.win);
 		
 		me.removeStyles();
 		if(PushBox.IndexOfPushBox(me)<0){
@@ -229,6 +232,10 @@ var PushBox = new Class({
 		
 	},
 
+	_insertElement:function(){
+		return (document.fullscreenElement||document.webkitFullscreenElement||document.mozFullscreenElement||document.msFullscreenElement||document.body);
+	},
+
 	//checks each parser function, and runs the callback the name and content of the first parser 
 	//that does not return false (assuming that the content is the return value of the parser function);
 	//the callback is expected to call _setContent(parser, content) parser is the name of the parser or handler.
@@ -251,7 +258,9 @@ var PushBox = new Class({
 		return false;
 		
 	},
-	
+	/**
+	 * @deprecated use .open(...) or PushBox.Open(...)
+	 */
 	fromElement: function(from, options) {
 		return this.open(from, options);
 	},
@@ -1134,6 +1143,27 @@ PushBox.GetPushBoxesAbove=function(windowOrPbox){
 
 };
 
+/**
+ * opens a pushbox window use this method instead of instance methods.
+ * @param {[type]} subject [description]
+ * @param {[type]} options [description]
+ */
+PushBox.Open=function(subject, options){
+
+	var instance=null;
+
+
+	try{
+
+		instance=window.parent.PushBoxWindow;
+
+	}catch(exception){
+		//Parent was inaccessible
+	}
+
+	return (instance||PushBoxWindow).open(subject, options);
+
+};
 
 window.addEvent("domready",function(){
 	if(!window.PushBoxWindow){
