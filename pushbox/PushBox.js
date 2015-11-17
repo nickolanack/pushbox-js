@@ -10,6 +10,7 @@
  * @license		MIT
  * 
  * @author		Nick Blackwell nickblackwell82@gmail.com
+ * 
  * @author		Harald Kirschner <mail [at] digitarald.de> SqueezeBox
  * @author		Rouven Weßling <me [at] rouvenwessling.de> SqueezeBox
  *
@@ -20,7 +21,7 @@
  * @example see example usage at https://github.com/nickolanack/pushbox-js
  * 
  */
-'use strict';
+
 var PushBox = new Class({
     Implements: [Events, Options, Chain],
 
@@ -143,11 +144,11 @@ var PushBox = new Class({
             }
         });
         if (me.options.shadow) {
-            if (Browser.chrome ||
-                    (Browser.safari && Browser.version >= 3) ||
-                    (Browser.opera && Browser.version >= 10.5) ||
-                    (Browser.firefox && Browser.version >= 3.5) ||
-                    (Browser.ie && Browser.version >= 9)) {
+            if (Browser.chrome
+                    || (Browser.safari && Browser.version >= 3)
+                    || (Browser.opera && Browser.version >= 10.5)
+                    || (Browser.firefox && Browser.version >= 3.5)
+                    || (Browser.ie && Browser.version >= 9)) {
                 me.win.addClass('shadow');
             } else if (!Browser.ie6) {
                 var shadow = new Element('div', {
@@ -188,7 +189,8 @@ var PushBox = new Class({
                 unit: 'px',
                 duration: 750,
                 transition: Fx.Transitions.Quint.easeOut,
-                link: 'cancel'
+                link: 'cancel',
+                unit: 'px'
             }, me.options.resizeFx)),
             content: new Fx.Tween(me.content, Object.append({
                 property: 'opacity',
@@ -210,19 +212,14 @@ var PushBox = new Class({
 
 
 
-        if (this.element) {
-            this._trash();
-        }
+        if (this.element != null) this._trash();
 
         if (!(this.overlay && this.win)) {
             this._build();
         }
 
-
-
-        var container = me._insertElement();
-        container.appendChild(this.overlay);
-        container.appendChild(this.win);
+        $$('body')[0].appendChild(this.overlay);
+        $$('body')[0].appendChild(this.win);
 
         me.removeStyles();
         if (PushBox.IndexOfPushBox(me) < 0) {
@@ -242,28 +239,21 @@ var PushBox = new Class({
 
         if (this.element && this.options.parse) {
             var obj = this.element.getProperty(this.options.parse);
-            if (obj && (obj = JSON.decode(obj, this.options.parseSecure))) {
-                this.setOptions(obj);
-            }
+            if (obj && (obj = JSON.decode(obj, this.options.parseSecure))) this.setOptions(obj);
         }
         this.url = ((this.element) ? (this.element.get('href')) : subject) || this.options.url || '';
 
         this._assignOptions();
 
         var handler = this.options.handler;
-        if (handler) {
-            return this._setContent(handler, this.parsers[handler].call(this, (handler == 'append' ? subject : true)));
-        }
+        if (handler) return this._setContent(handler, this.parsers[handler].call(this, (handler == 'append' ? subject : true)));
+
 
         this._pickParser(function(key, content) {
             me._setContent(key, content);
         });
         return this;
 
-    },
-
-    _insertElement: function() {
-        return (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullscreenElement || document.msFullscreenElement || document.body);
     },
 
     //checks each parser function, and runs the callback the name and content of the first parser 
@@ -273,23 +263,23 @@ var PushBox = new Class({
 
         var me = this;
         var parsers = ['image', 'iframe', 'append'];
-        var key;
-        var content;
         for (var i = 0; i < parsers.length; i++) {
+            ( function(key) {
 
-            key = parsers[i];
-            content = me.parsers[key].call(me);
-            if (content) {
-                callback(key, content);
-                return true;
-            }
+                var content = me.parsers[key].call(me);
+                if (content) {
+                    callback(key, content);
+                    return true;
+                }
+                ;
+
+            } )(parsers[i]);
+
         }
         return false;
 
     },
-    /**
-     * @deprecated use .open(...) or PushBox.Open(...)
-     */
+
     fromElement: function(from, options) {
         return this.open(from, options);
     },
@@ -304,9 +294,8 @@ var PushBox = new Class({
         // window.parent.console.debug(stack);
         var found = false;
         Object.each(stack, function(pb) {
-            if (!found && pb.asset && pb.asset.contentWindow == window) {
+            if (!found && pb.asset && pb.asset.contentWindow == window)
                 found = pb;
-            }
 
         });
         // window.parent.console.debug(found); 
@@ -317,9 +306,7 @@ var PushBox = new Class({
     getPushBoxAbove: function(window) {
         var me = this;
         var stack = me.getPushBoxesAbove(window);
-        if (stack.length) {
-            return stack[0];
-        }
+        if (stack.length) return stack[0];
         return false;
     },
 
@@ -372,32 +359,24 @@ var PushBox = new Class({
         if (!me.isOpen) {
 
             var pushbox = me.getPushBoxFor(window);
-            if (pushbox.isOpen) {
-                return pushbox.close();
-            }
+            if (pushbox.isOpen) return pushbox.close();
 
         } else {
             PushBox.RemoveFromStack(me);
         }
 
         var stoppable = (typeOf(e) == 'event');
-        if (stoppable) {
-            e.stop();
-        }
+        if (stoppable) e.stop();
         try {
-            if (!this.isOpen || (stoppable && !Function.from(this.options.closable).call(this, e))) {
-                return this;
-            }
-        } catch ( err ) {
-            if (window.console) {
-                window.console.error(['PushBox Close Exception', err]);
-            }
+            if (!this.isOpen || (stoppable && !Function.from(this.options.closable).call(this, e))) return this;
+        } catch ( e ) {
+            console.error(["PushBox Close Exception", e]);
         }
 
         this.fireEvent('onClose', [this.content]);
-        this._contentState = 'closing';
+        this._content_state = 'closing';
         this.fx.content.start(0);
-        this._overlayState = 'closing';
+        this._overlay_state = 'closing';
         this.fx.overlay.start(0).chain(function() {
             me._hideOverlay();
             me._trash();
@@ -447,11 +426,9 @@ var PushBox = new Class({
         this.applyTimer = (function() {
             me._applyContent.apply(me, c);
         }).delay(this.fx.overlay.options.duration);
-        if (this.overlay.retrieve('opacity')) {
-            return this;
-        }
+        if (this.overlay.retrieve('opacity')) return this;
         this._showOverlay();
-        this._overlayState = 'opening';
+        this._overlay_state = 'opening';
         this.fx.overlay.start(this.options.overlayOpacity);
         return this.reposition();
     },
@@ -542,15 +519,6 @@ var PushBox = new Class({
 
 
     _addImageControls: function() {
-
-
-        if (!window.JSTextUtilities) {
-            throw new Error('Expected Library JSTextUtitlities');
-        }
-        if (!window.JSImageUtilites) {
-            throw new Error('Expected Library JSImageUtilites');
-        }
-
         var me = this;
         var images = me.options.images;
         if (images.length <= 1) {
@@ -590,8 +558,8 @@ var PushBox = new Class({
                         display: 'none'
                     }
                 }));
-
-                new Asset.image(JSImageUtilites.ThumbnailUrl(imgStr, {
+                (
+                thumb = new Asset.image(JSImageUtilites.ThumbnailUrl(imgStr, {
                     width: 50,
                     height: 30
                 }), {
@@ -603,33 +571,27 @@ var PushBox = new Class({
                             clip: true,
                             className: false
                         });
-                        if (selected) {
-                            clipped.addClass('selected');
-                        }
+                        if (selected) clipped.addClass('selected');
                         imageThumbsContainer.replaceChild(clipped, p);
                         //imageThumbsContainer.replaceChild(clipped,thumb);
                         clipped.setStyle('display', null);
-                        if (!selected) {
-                            JSImageUtilites.AddImageLightBox(clipped, imgStr, {
+                        if (!selected) JSImageUtilites.AddImageLightBox(clipped, imgStr, {
                                 images: images,
                                 onOpen: me.close.bind(me)
                             });
-                        }
 
                     }
-                });
+                }));
             }
 
         });
 
+        var loop = true;
 
-
-        if (i === 0) {
+        if (!loop && i == 0)
             hasPrevious = false;
-        }
-        if (i === (images.length - 1)) {
+        if (!loop && i == (images.length - 1))
             hasNext = false;
-        }
 
 
 
@@ -691,7 +653,7 @@ var PushBox = new Class({
             scroll = this.doc.getScroll();
         this.size = Object.append((this.isLoading) ? this.options.sizeLoading : this.options.size, size);
 
-        var parentSize = window.getSize();
+        var parentSize = self.getSize();
         if (this.size.x == parentSize.x) {
 
             this.size.y = this.size.y - 50;
@@ -722,14 +684,12 @@ var PushBox = new Class({
 
         to = me.checkAnchor(to);
         this.hideContent();
-        this._windowState = 'opening'; // this is not used.
+        this._window_state = 'opening';
         if (!instantly) {
 
             this.fx.win.start(to).chain(function() {
                 me.showContent();
-                if ((typeof callback) == 'function') {
-                    callback();
-                }
+                if ((typeof callback) == 'function') callback();
             });
 
         } else {
@@ -739,9 +699,7 @@ var PushBox = new Class({
             this.showTimer = (function() {
 
                 me.showContent();
-                if ((typeof callback) == 'function') {
-                    callback();
-                }
+                if ((typeof callback) == 'function') callback();
 
             }).delay(50);
         }
@@ -791,9 +749,7 @@ var PushBox = new Class({
     _startLoading: function() {
 
         var me = this;
-        if (me.isLoading) {
-            return;
-        }
+        if (me.isLoading) return;
         me.isLoading = true;
         me.win.addClass('pb-ld');
         me.win.setProperty('aria-busy', true);
@@ -807,9 +763,7 @@ var PushBox = new Class({
     _stopLoading: function() {
 
         var me = this;
-        if (!me.isLoading) {
-            return;
-        }
+        if (!me.isLoading) return;
         me.isLoading = false;
         me.win.removeClass('pb-ld');
         me.win.setProperty('aria-busy', false);
@@ -840,17 +794,15 @@ var PushBox = new Class({
 
     showContent: function() {
         var me = this;
-        me._contentState = 'opening';
+        me._content_state = 'opening';
         me.fx.content.start(1);
 
     },
 
     hideContent: function() {
         var me = this;
-        if (!me.content.getStyle('opacity')) {
-            me.fireEvent('onHide', [me.win]);
-        }
-        me._contentState = 'closing';
+        if (!me.content.getStyle('opacity')) me.fireEvent('onHide', [me.win]);
+        me._content_state = 'closing';
         me.fx.content.cancel().set(0);
     },
 
@@ -877,7 +829,8 @@ var PushBox = new Class({
             unit: 'px',
             duration: 70,
             transition: Fx.Transitions.Quint.easeOut,
-            link: 'cancel'
+            link: 'cancel',
+            unit: 'px'
         }, options));
         var to = [{
             left: me.win.getPosition().x + 20
@@ -934,11 +887,6 @@ var PushBox = new Class({
         var over = this.overlay.getStyles('height', 'width');
         var j = parseInt(over.height);
         var k = parseInt(over.width);
-
-        //at least in IE, j, and k might be NaN
-        j = isNaN(j) ? 0 : j;
-        k = isNaN(k) ? 0 : k;
-
         if ((ssize.y > j && size.y >= j) || (ssize.x > k && size.x >= k)) {
             //resizes the shadow.
             this.overlay.setStyles({
@@ -957,19 +905,19 @@ var PushBox = new Class({
             if ((l + pad) > size.y && l >= 200) {
                 //squeeze y
                 this.win.setStyles({
-                    height: (size.y - pad) + 'px'
+                    height: (size.y - pad) + "px"
                 });
             } else if (l > 0 && (l + pad) < size.y && l < this.options.size.y) {
                 this.win.setStyles({
 
-                    height: this.options.size.y + 'px'
+                    height: this.options.size.y + "px"
                 });
 
 
-            } else if (l === 0 && (this.options.size.y + pad) > size.y && this.options.size.y > 200) {
+            } else if (l == 0 && (this.options.size.y + pad) > size.y && this.options.size.y > 200) {
                 this.win.setStyles({
-                    top: (pad / 2) + 'px',
-                    height: (size.y - pad) + 'px'
+                    top: (pad / 2) + "px",
+                    height: (size.y - pad) + "px"
                 });
             }
         }
@@ -994,12 +942,8 @@ var PushBox = new Class({
         },
 
         clone: function(preset) {
-            if (document.id(this.options.target)) {
-                return document.id(this.options.target);
-            }
-            if (this.element && !this.element.parentNode) {
-                return this.element;
-            }
+            if (document.id(this.options.target)) return document.id(this.options.target);
+            if (this.element && !this.element.parentNode) return this.element;
             var bits = this.url.match(/#([\w-]+)$/);
             return (bits) ? document.id(bits[1]) : (preset ? this.element : false);
         },
@@ -1012,7 +956,7 @@ var PushBox = new Class({
             return (preset || this.url) ? this.url : false;
         },
 
-        string: function( /*preset*/ ) {
+        string: function(preset) {
             return true;
         },
         url: function(preset) {
@@ -1064,7 +1008,7 @@ var PushBox = new Class({
                 this.asset.width = size.x;
                 this.asset.height = size.y;
                 this._applyContent(this.asset, size);
-                if (this.options.images && this.options.images.length > 1) {
+                if (this.options.images != null && this.options.images.length > 1) {
                     this._addImageControls();
 
                 }
@@ -1073,23 +1017,17 @@ var PushBox = new Class({
             //it is posible that the image loads imediately. 
             //in this case, this.asset will be set. otherwise return null
             //and let the onload method call _applyContent itself, (which is what this returns into)
-            if (tmp && tmp.onload && tmp.complete) {
-                tmp.onload();
-            }
+            if (tmp && tmp.onload && tmp.complete) tmp.onload();
             return (this.asset) ? [this.asset, size] : null;
         },
 
         clone: function(el) {
-            if (el) {
-                return [el.clone()];
-            }
+            if (el) return [el.clone()];
             return this._onError();
         },
 
         adopt: function(el) {
-            if (el) {
-                return [el];
-            }
+            if (el) return [el];
             return this._onError();
         },
 
@@ -1101,9 +1039,7 @@ var PushBox = new Class({
             }, this.options.ajaxOptions)).addEvents({
                 onSuccess: function(resp) {
                     this._applyContent(resp);
-                    if (options.evalScripts !== null && !options.evalScripts) {
-                        Browser.exec(this.asset.response.javascript);
-                    }
+                    if (options.evalScripts !== null && !options.evalScripts) Browser.exec(this.asset.response.javascript);
                     this.fireEvent('onAjax', [resp, this.asset]);
                     this.asset = null;
                 }.bind(this),
@@ -1159,9 +1095,8 @@ PushBox.PushBoxStack = [];
 PushBox.GetOpenerWindow = function(windowOrPbox) {
 
 var stack = PushBox.GetPushBoxStack();
-if (windowOrPbox === null) {
+if (windowOrPbox == null)
     windowOrPbox = window;
-}
 var found = null;
 var below = [];
 Array.each(stack, function(pb) {
@@ -1175,9 +1110,7 @@ Array.each(stack, function(pb) {
 });
 if (below.length) {
     var opener = below[below.length - 1];
-    if (opener.asset && opener.asset.contentWindow) {
-        return opener.asset.contentWindow;
-    }
+    if (opener.asset && opener.asset.contentWindow) return opener.asset.contentWindow;
 }
 return found;
 };
@@ -1192,9 +1125,8 @@ return found;
  */
 PushBox.GetOpenerPushBox = function(windowOrPbox) {
 var stack = PushBox.GetPushBoxStack();
-if (windowOrPbox === null) {
+if (windowOrPbox == null)
     windowOrPbox = window;
-}
 var found = false;
 var below = [];
 
@@ -1208,9 +1140,8 @@ Array.each(stack, function(pb) {
     }
 });
 var opener = false;
-if (below.length && below[below.length - 1].asset) {
+if (below.length && below[below.length - 1].asset)
     opener = below[below.length - 1];
-}
 
 return opener;
 };
@@ -1223,16 +1154,20 @@ return opener;
 PushBox.GetCurrentPushBox = function(theWindow) {
 
 var stack = PushBox.GetPushBoxStack();
-if (theWindow === null) {
+if (theWindow == null)
     theWindow = window;
-}
-var pb;
-for (var i = 0; i < stack.length; i++) {
 
-    pb = stack[i];
-    if ((pb.asset && pb.asset.contentWindow == theWindow) || pb == theWindow) {
-        return pb;
-    }
+for (var i = 0; i < stack.length; i++) {
+    var pushbox = null;
+    if( (pushbox = ( function(pb) {
+
+                if ((pb.asset && pb.asset.contentWindow == theWindow) || pb == theWindow) {
+                    return pb;
+                }
+                return false;
+
+            } )(stack[i])) )return pushbox;
+
 }
 
 
@@ -1246,13 +1181,7 @@ PushBox.AddToStack = function(pushBox) {
 PushBox.GetPushBoxStack().push(pushBox);
 };
 PushBox.RemoveFromStack = function(pushBox) {
-
-if (PushBox.Parent()) {
-    PushBox.Parent().RemoveFromStack(pushBox);
-} else {
-    PushBox.PushBoxStack.splice(PushBox.IndexOfPushBox(pushBox), 1);
-}
-
+(PushBox.Parent()) ? PushBox.Parent().RemoveFromStack(pushBox) : PushBox.PushBoxStack.splice(PushBox.IndexOfPushBox(pushBox), 1);
 };
 PushBox.PushBoxAtIndex = function(index) {
 return (PushBox.Parent()) ? PushBox.Parent().PushBoxAtIndex(index) : PushBox.PushBoxStack[index];
@@ -1270,9 +1199,7 @@ try {
         return window.parent.PushBox;
     }
 } catch ( e ) {
-    if (window.console) {
-        window.console(e);
-    }
+    JSConsoleError(e);
 }
 
 return false;
@@ -1286,13 +1213,11 @@ var found = false;
 var above = [];
 Array.each(stack, function(pb) {
     if (!found) {
-        if ((pb.asset && pb.asset.contentWindow == windowOrPbox) || pb == windowOrPbox) {
+        if ((pb.asset && pb.asset.contentWindow == windowOrPbox) || pb == windowOrPbox)
             found = pb;
-        }
         //if windowOrPbox is actually the static Pushbox asigned to this widow, then it is not actually in the list so compare its window 
-        if (windowOrPbox == window.PushBoxWindow && pb.asset && windowOrPbox.asset && windowOrPbox.asset.contentWindow == pb.asset.contentWindow) {
+        if (windowOrPbox == window.PushBoxWindow && pb.asset && windowOrPbox.asset && windowOrPbox.asset.contentWindow == pb.asset.contentWindow)
             found = pb;
-        }
     } else {
         above.push(pb);
     }
@@ -1304,29 +1229,8 @@ return above;
 
 };
 
-/**
- * opens a pushbox window use this method instead of instance methods.
- * @param {[type]} subject [description]
- * @param {[type]} options [description]
- */
-PushBox.Open = function(subject, options) {
 
-var instance = null;
-
-
-try {
-
-    instance = window.parent.PushBoxWindow;
-
-} catch ( exception ) {
-    //Parent was inaccessible
-}
-
-return (instance || window.PushBoxWindow).open(subject, options);
-
-};
-
-window.addEvent('domready', function() {
+window.addEvent("domready", function() {
     if (!window.PushBoxWindow) {
 
         window.PushBoxWindow = new PushBox();
